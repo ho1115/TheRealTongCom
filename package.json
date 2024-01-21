@@ -18,13 +18,15 @@
     "express": "^4.18.2",
     "lucide-react": "^0.312.0",
     "mysql": "^2.18.1",
-    "mysql2": "^3.6.5",
+    "mysql2": "^3.7.1",
+    "net": "^1.0.2",
     "next": "14.0.4",
     "react": "^18",
     "react-dom": "^18",
     "serverless-mysql": "^1.5.5",
     "tailwind-merge": "^2.2.0",
-    "tailwindcss-animate": "^1.0.7"
+    "tailwindcss-animate": "^1.0.7",
+    "tls": "^0.0.1"
   },
   "devDependencies": {
     "autoprefixer": "^10.4.17",

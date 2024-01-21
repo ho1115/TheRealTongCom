@@ -15,15 +15,20 @@ const sidelist = () => {
     
 
     useEffect(()=>{
-        if(!router.isReady) {return};    
+        if(!router.isReady) {return};  
         const bookName = pgData.engToCh[router.query.books]
         setBook(router.query.books)
         setchapList(pgData.booksNchaps[bookName])
+        if(!(router.query.books in pgData.engToCh)) {
+            setchapList(["網址錯誤，無對應史料，請重新查詢，或點擊此處。"])
+            setBook("tongchi")
+        }
     }, [router.isReady, router.asPath]);
     
     return (
+        
     <div className = "inline-flex flex-col w-1/6 fixed border-r-2 border-black top-16 h-screen bg-gray-300">
-        <div className = "inline-flex flex-row w-auto border-b-2 border-black bg-neutral-700 h-16 justify font-bold place-items-center justify-around">        
+        <div className = "inline-flex flex-row w-auto border-b-2 border-black bg-neutral-700 min-h-16 font-bold place-items-center justify-around">        
             <p>選擇史料</p>        
             <select className = "text-black border-2 rounded border-black" id = "hisBook" name = "hisBook"
                     onChange = {(ele) => {setBook(ele.target.value);}}>
