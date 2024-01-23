@@ -1,14 +1,18 @@
 import Topnav from "@/pages/pageComps/topnav"
 import Hislist from "@/pages/pageComps/hislist"
 import Footer from "@/pages/pageComps/footer"
+import tzChaps from "@/pages/api/subChaps"
 
-// export async function getServerSideProps(context) {
+import entoch from "@/pages/entoch"
+import chapStruct from "@/pages/chapStruct.json"
+
+export async function getServerSideProps(context) {
   
-  // const bookName = pgData.engToCh[context.params.books]
-  // const chapName = pgData.booksNchaps[bookName][context.params.chaps - 1]
-  // const posts = await subChaps(bookName, chapName, 'cut')
-  // return { props: { posts } }
-// }
+  const bookName = entoch[context.params.books]
+  const chapName = context.params.chaps
+  const posts = await tzChaps(chapName, 'cut')
+  return { props: { posts } }
+}
 
 export default function Home({ posts }) {
   
