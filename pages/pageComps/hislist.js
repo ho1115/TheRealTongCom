@@ -12,7 +12,6 @@ import {
 
 import { useRouter } from "next/router";
 import { useEffect } from "react";
-import subChaps from "../api/subChaps";
 
  
 const sidelist = () => {
