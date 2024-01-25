@@ -37,7 +37,7 @@ const sidelist = () => {
                             id = {'BTN'+chaps}>&#9660;</button>
                     </CollapsibleTrigger>
                     <p className="inline-flex pl-2">{chaps}</p>
-                    <CollapsibleContent className="overflow-auto border-2 border-gray-500 bg-gray-300">
+                    <CollapsibleContent className="overflow-auto border-2 rounded mt-2 border-gray-500 bg-gray-300">
                         {Object.values(chapList[chaps]).map(subs =>(
                         <Link key = {subs} className = "w-auto block py-1 pl-8 text-sm text-black hover:bg-neutral-500 " 
                             href = {{
@@ -50,7 +50,7 @@ const sidelist = () => {
                     </div>
                 </Collapsible> :
                 <div className = "block text-black w-full py-2 overflow-auto border-b-2 border-gray-500">
-                    <Link key = {chaps} className = "w-auto block py-1 pl-2  text-black hover:bg-neutral-500 " 
+                    <Link key = {chaps} className = "w-auto block py-1 pl-2 text-black hover:bg-neutral-500 " 
                         href = {{
                             pathname : "./[chaps]",
                             query :{ books: book, chaps: Object.values(chapList[chaps])[0] },
@@ -74,7 +74,7 @@ const sidelist = () => {
     return (
     
     <div className = "inline-flex flex-col w-1/6 border-r-2 border-black top-16 h-[calc(100vh-5.5rem)] bg-gray-400">
-        <div className = "inline-flex flex-row w-auto border-b-2 border-black bg-neutral-700 min-h-16 font-bold place-items-center justify-around">        
+        <div className = "inline-flex flex-row w-auto border-b-2 border-black bg-amber-600 min-h-16 font-bold place-items-center justify-around">        
             <p className = "truncate">選擇史料</p>        
             <select className = "text-black border-2 max-w-[10vw] rounded border-black" id = "hisBook" name = "hisBook"
                     onChange = {(ele) => {setBook(ele.target.value); setchapList(chapStruct[entoch[ele.target.value]])}}>
@@ -91,7 +91,7 @@ const sidelist = () => {
             {
             !collaTarget.includes(book) ?
                 chapList.map(chaps => ( 
-                    <Link key = {chaps} className = "w-auto block p-2 text-black hover:bg-neutral-500 " 
+                    <Link key = {chaps} className = "w-auto block p-2 text-black border-b-2 border-gray-600 hover:bg-neutral-500 " 
                         href = {{
                         pathname : "./[chaps]",
                         query :{ books: book, chaps: chapList.indexOf(chaps) + 1 },

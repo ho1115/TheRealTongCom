@@ -2,7 +2,7 @@ const ms = require('mysql2')
 
 async function officialChaps(bookName, chapName, version){
 
-    if (bookName == "通典-邊防篇") {bookName = "通典"}
+    if (bookName == "通典-邊防篇") {bookName = "通典";}
 
     const conn = ms.createConnection({
         host: process.env.HOST,
@@ -15,40 +15,36 @@ async function officialChaps(bookName, chapName, version){
     var cnt = version === 'all' ? 'all_lap_length' : 'cut_lap_length';
     var relationCol = version === 'all' ? 'all_relation' : 'cut_relation';
     var result = {
-        'tzChaps' : [],
+        'offID' : 0,
+        'dynas' : [],
         'peopleList' : [],
         'subChaps' : {},
         'matchLen' : 0,
         'totalLen' : 0,
     }   
-    var sql = 'SELECT DBID, word_count, ' + relationCol + ', ' + cnt + 'FROM official_history WHERE book_name = ? and volumn = ?'
+    var sql = `SELECT DBID, word_count, ${cnt}, ${relationCol} FROM official_history WHERE book_name = ? and volumn = ?`
 
     var qRes = await conn.promise().query(sql, [bookName, chapName]);
     for (let i = 0; i < qRes[0].length; i++) {
-        var tongid = qRes[0][i]['DBID']
-        result['totalLen']= qRes[0][i]['word_count']
-        result['matchLen'] = qRes[0][i][cnt]
-        var matchChapJs = {}
-        var relationList = JSON.parse(qRes[0][i][relationCol])
+        if (result['offID'] == 0) {result['offID'] = qRes[0][i]['DBID'];}
+        result['totalLen']= qRes[0][i]['word_count'];
+        result['matchLen'] = qRes[0][i][cnt];
+        var relationList = JSON.parse(qRes[0][i][relationCol]);
         var tChap;
         var tPeo;
 
         Object.entries(relationList).forEach(([key, value]) => {
             tChap = value['name'].split('-')[0].slice(0, -1)
-            tPeo = value['name'].split('-')[0].slice(1)
+            tPeo = value['name'].split('-')[1].slice(1)
             result['peopleList'].push(tPeo)
-            if (!result['tzchaps'].includes(tChap)) {result['tzchaps'].push(tChap)}
-            matchChapJs[key] = {
-                'chapName' : value['name'],
+            if (!result['dynas'].includes(tChap)) {result['dynas'].push(tChap);}
+            if (!result['subChaps'][tChap]) {result['subChaps'][tChap] = {};}
+            result['subChaps'][tChap][key] = {
+                'chapName' :tPeo,
                 'wordCnt' : value['matchCount'],
                 'tWordCnt' : value['totalCount'],
-            }
+            };
         })
-
-        result['subChaps'][tChap] = {
-            'tongID' : tongid,
-            'matchChaps' : matchChapJs,
-        }
     }
     conn.end();
     return result

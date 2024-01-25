@@ -15,7 +15,7 @@ const topnav = () => {
     
 
     return (
-      <div className = "inline-flex w-screen max-w-[100vw] sticky top-0 border-b-2 border-gray-600 h-16 justify font-bold place-items-center">        
+      <div className = "inline-flex w-screen max-w-[100vw] sticky top-0 border-b border-slate-700 h-16 justify font-bold place-items-center">        
         <div className="inline-flex pl-4 w-1/5"><Link className = "text-center text-3xl truncate"  href ='/welcome'>通志史料比對系統</Link></div>        
         <nav className = "inline-flex pl-4 place-items-center gap-6 text-lg">
           <Link className= {pathName.includes('compRes')? current + ' truncate' : usual + ' truncate'} href = {pathPre + '/compRes/tongchi/本紀 第一'} >比對結果</Link>
