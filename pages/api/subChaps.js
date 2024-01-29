@@ -3,6 +3,7 @@ const ms = require('mysql2')
 async function officialChaps(bookName, chapName, version){
 
     if (bookName == "通典-邊防篇") {bookName = "通典";}
+    if (bookName == "帝王世紀(不完整)") {bookName = "帝王世紀";}
 
     const conn = ms.createConnection({
         host: process.env.HOST,
@@ -79,7 +80,7 @@ async function tzChaps(chapName, version){
         var matchLen = qRes[0][i][cnt]
         var matchChapJs = {}
         var relationList = JSON.parse(qRes[0][i][relationCol])
-
+    
         if (!result['dynas'].includes(qRes[0][i]['dynasty'])) {result['dynas'].push(qRes[0][i]['dynasty'])}
         
         Object.entries(relationList).forEach(([key, value]) => {
@@ -88,6 +89,8 @@ async function tzChaps(chapName, version){
                 'wordCnt' : value['count'],
             }
         })
+        
+        
         result['peopleList'].push(master)
         result['people'][master] = {
             'tongID' : tongid,
@@ -98,6 +101,7 @@ async function tzChaps(chapName, version){
         }
     }
     conn.end();
+    
     return result
 }
 

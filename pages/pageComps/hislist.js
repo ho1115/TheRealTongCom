@@ -1,7 +1,7 @@
 import * as React from "react"
-import 'tailwindcss/tailwind.css';
-import entoch from "../entoch.json"
-import chapStruct from "../chapStruct.json"
+import '@/app/globals.css'
+import entoch from "@/entoch.json"
+import chapStruct from "@/chapStruct.json"
 import Link from "next/link"
 import {
     Collapsible,
@@ -14,7 +14,7 @@ import { useRouter } from "next/router";
 import { useEffect } from "react";
 
  
-const sidelist = () => {
+const Sidelist = () => {
     const collaTarget = ["tongchi", "gonyang", "zuo", "guliang", "zhanguo", "tongbian"]
     const router = useRouter()
     const [book, setBook] = React.useState("tongchi");
@@ -22,24 +22,25 @@ const sidelist = () => {
 
     function changeBTN(index) {
         if (typeof document !== 'undefined') {
-            const ele = document.getElementById(index);
+            const ele = document.getElementById(index).children[0];
             ele.innerText = ele.innerText == String.fromCharCode(0x25B2) ? String.fromCharCode(0x25BC) : String.fromCharCode(0x25B2);
         }
     }
     const collaConstruct = (chaps) => {
         return (
             chapList[chaps].length > 1 ?
-                <Collapsible>
-                    <div className = "block text-black w-full py-2 overflow-auto border-b-2 border-gray-500">
-                    <CollapsibleTrigger asChild>
-                        <button onClick = {() => changeBTN('BTN'+chaps)} 
-                            className="inline-flex rounded justify-center border-1 bg-neutral-500 hover:bg-neutral-600 w-6 h-6 text-center" 
-                            id = {'BTN'+chaps}>&#9660;</button>
-                    </CollapsibleTrigger>
-                    <p className="inline-flex pl-2">{chaps}</p>
-                    <CollapsibleContent className="overflow-auto border-2 rounded mt-2 border-gray-500 bg-gray-300">
+                <Collapsible key = {`${chaps}00`}>
+                    <div key = {`${chaps}0`} className = "block w-full py-2 justify-between overflow-auto border-b-2 border-sec">
+                    <div key = {`${chaps}1`} className = "justify-between w-full">
+                        <CollapsibleTrigger asChild key = {chaps}>
+                            <button onClick = {() => changeBTN('BTN'+chaps) } key = {`${chaps}2`} 
+                                className="w-full inline-flex h-full text-start pl-2 py-1 hover:bg-neutral-600 outline-none" 
+                                id = {'BTN'+chaps}>{chaps} <p className="pl-2 text-minor">&#9660;</p></button>
+                        </CollapsibleTrigger>
+                    </div>
+                    <CollapsibleContent key = {`${chaps}3`} className="overflow-auto border-2 rounded mt-2 border-minor bg-sec">
                         {Object.values(chapList[chaps]).map(subs =>(
-                        <Link key = {subs} className = "w-auto block py-1 pl-8 text-sm text-black hover:bg-neutral-500 " 
+                        <Link key = {subs} className = "w-auto block py-1 pl-8 text-sm hover:bg-neutral-600 " 
                             href = {{
                                 pathname : "./[chaps]",
                                 query :{ books: book, chaps: subs },
@@ -49,12 +50,12 @@ const sidelist = () => {
                     </CollapsibleContent>
                     </div>
                 </Collapsible> :
-                <div className = "block text-black w-full py-2 overflow-auto border-b-2 border-gray-500">
-                    <Link key = {chaps} className = "w-auto block py-1 pl-2 text-black hover:bg-neutral-500 " 
+                <div key = {`${chaps}00`} className = "block w-full py-2 overflow-auto border-b-2 border-sec">
+                    <Link key = {chaps} className = "w-auto block py-1 pl-2 hover:bg-neutral-600 " 
                         href = {{
                             pathname : "./[chaps]",
                             query :{ books: book, chaps: Object.values(chapList[chaps])[0] },
-                        }}>{ '- ' + chaps}
+                        }}>{chaps}
                     </Link>
                 </div>
         )
@@ -69,29 +70,24 @@ const sidelist = () => {
             setchapList(["網址錯誤，無對應史料，請重新查詢，或點擊此處。"])
             setBook("tongchi")
         }
-    }, [router.isReady, router.asPath]);
+    }, [router.isReady, router.asPath, router.query.books]);
     
     return (
     
-    <div className = "inline-flex flex-col w-1/6 border-r-2 border-black top-16 h-[calc(100vh-5.5rem)] bg-gray-400">
-        <div className = "inline-flex flex-row w-auto border-b-2 border-black bg-amber-600 min-h-16 font-bold place-items-center justify-around">        
-            <p className = "truncate">選擇史料</p>        
-            <select className = "text-black border-2 max-w-[10vw] rounded border-black" id = "hisBook" name = "hisBook"
-                    onChange = {(ele) => {setBook(ele.target.value); setchapList(chapStruct[entoch[ele.target.value]])}}>
+    <div className = "inline-flex flex-col w-1/5 m-2 p-2 top-16 h-[calc(100vh-5.5rem)] bg-main">
+        <div className = "inline-flex flex-row w-auto min-h-12 border-b-2 mb-2 border-sec font-bold place-items-center justify-around">             
+            <select className = "w-full h-full text-xl p-2 rounded text-least mb-2 bg-sec outline-none" id = "hisBook" name = "hisBook"
+                    onChange = {(ele) => {setBook(ele.target.value); setchapList(chapStruct[entoch[ele.target.value]])}} defaultValue={router.query.books}>
                 {
-                    Object.keys(entoch).map(item => (
-                        item === router.query.books ? 
-                        <option key = {item} value = {item} selected>{entoch[item]}</option> :
-                        <option key = {item} value = {item}>{entoch[item]}</option> 
-                    ))
+                    Object.keys(entoch).map(item => (<option key = {item} value = {item}>{entoch[item]}</option> ))
                 }
             </select>
         </div>
-        <div className = "w-auto overflow-auto max-h-screen pb-2 px-2">
+        <div className = "w-auto overflow-auto max-h-screen text-least pb-2 px-2 border-l-2 border-minor">
             {
             !collaTarget.includes(book) ?
                 chapList.map(chaps => ( 
-                    <Link key = {chaps} className = "w-auto block p-2 text-black border-b-2 border-gray-600 hover:bg-neutral-500 " 
+                    <Link key = {chaps} className = "w-auto block p-2 hover:bg-neutral-600 border-b-2 border-sec" 
                         href = {{
                         pathname : "./[chaps]",
                         query :{ books: book, chaps: chapList.indexOf(chaps) + 1 },
@@ -104,4 +100,4 @@ const sidelist = () => {
     );
 }
 
-export default sidelist;
+export default Sidelist;
