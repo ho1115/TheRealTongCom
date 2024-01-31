@@ -1,5 +1,6 @@
 'use client';
 
+import * as React from "react"
 import Topnav from "@/pages/pageComps/topnav"
 import Footer from "@/pages/pageComps/footer"
 import allMatches from "@/pages/api/compMatches"
@@ -62,12 +63,13 @@ export default function Home({ posts, conts }) {
     return (
       <>
       {Object.entries(matchJs[`${prefix}TextN`]).map(([key, value]) => (
-        <><span>{value}</span>
-        <span className = {`rounded bg-minor/50 cuts${key}`} onMouseOver = { () => lightUp(`cuts${key}`)} 
-              onMouseOut = {() => lightDown(`cuts${key}`)} onClick = {() => adjView(`${reversPos}cuts${key}`)} id = {`${pos}cuts${key}`}> 
-              {matchJs[`${prefix}TextY`][key]}
-        </span></>
-      ))}<span>{matchJs[`${prefix}TextTail`]}</span></>
+        <React.Fragment key = {`${prefix}${key}#0`}><span key = {`${prefix}${key}#0`}>{value}</span>
+        <span key = {`${prefix}${key}#1`} 
+              className = {`rounded bg-minor/50 cuts${matchJs[`${prefix}TextY`][key]['spanID']}`} onMouseOver = { () => lightUp(`cuts${matchJs[`${prefix}TextY`][key]['spanID']}`)} 
+              onMouseOut = {() => lightDown(`cuts${matchJs[`${prefix}TextY`][key]['spanID']}`)} onClick = {() => adjView(`${reversPos}cuts${matchJs[`${prefix}TextY`][key]['spanID']}`)} id = {`${pos}cuts${matchJs[`${prefix}TextY`][key]['spanID']}`}> 
+              {matchJs[`${prefix}TextY`][key]['para']}
+        </span></React.Fragment>
+      ))}<span key = {`${prefix}#2`}>{matchJs[`${prefix}TextTail`]}</span></>
     )
   }
 
@@ -95,6 +97,7 @@ export default function Home({ posts, conts }) {
                     )
                 )
               }
+              
             </div>
             
           </div>

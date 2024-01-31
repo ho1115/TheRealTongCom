@@ -35,24 +35,33 @@ export default async function contentMatches(TID, HID, version) {
     var Htext = qRes[0][0]['content']
     result['hisTextN'] = {};
     result['hisTextY'] = {};
-   
-    result['matchArrs'].forEach(element => {
+
+    result['matchArrs'].sort(function(a, b) {return a.tonchi_index - b.tonchi_index}).forEach(element => {
         TRptr = element['tonchi_index']
         result['tongTextN'][cnt] = Ttext.substring(TLptr, TRptr);
         TLptr = TRptr;
         TRptr += element['tonchi_length'];
-        result['tongTextY'][cnt] = Ttext.substring(TLptr, TRptr);
+        result['tongTextY'][cnt] = {'para' : Ttext.substring(TLptr, TRptr), 'spanID' : `${element['tonchi_index']}#${element['history_index']}`};
         TLptr = TRptr;
+        cnt += 1;
+    });
+    result['tongTextTail'] = Ttext.substring(TLptr, Ttext.length);
+
+    cnt = 0
+
+    result['matchArrs'].sort(function(a, b) {return a.history_index - b.history_index}).forEach(element => {
         HRptr = element['history_index']
         result['hisTextN'][cnt] = Htext.substring(HLptr, HRptr);
         HLptr = HRptr;
         HRptr += element['history_length'];
-        result['hisTextY'][cnt] = Htext.substring(HLptr, HRptr);
+        result['hisTextY'][cnt] = {'para' : Htext.substring(HLptr, HRptr), 'spanID' : `${element['tonchi_index']}#${element['history_index']}`};
         HLptr = HRptr;
         cnt += 1;
-    });
-    result['tongTextTail'] = Ttext.substring(TLptr, Ttext.length);
+    });    
     result['hisTextTail'] = Htext.substring(HLptr, Htext.length);
+
+    cnt = 0
+
     result['hisLen'] =  qRes[0][0]['word_count'];
     result['hisName'] =  `${qRes[0][0]['book_name']} - ${qRes[0][0]['volumn']}`;
     conn.end();

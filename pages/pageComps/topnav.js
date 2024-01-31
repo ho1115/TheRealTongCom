@@ -23,7 +23,7 @@ const Topnav = () => {
         <div>   
           <nav className = "inline-flex pl-4 mr-10 w-[30vw] place-items-center justify-around gap-6 text-lg">
             <Link className= {pathName.includes('compRes')? current + ' truncate' : usual + ' truncate'} href = {pathPre + '/compRes/tongchi/本紀 第一'} >比對結果</Link>
-            <Link className= {pathName.includes('dataStat')? current + ' truncate' : usual + ' truncate'} href = {pathPre + '/dataStat/tongchi/本紀 第一'}>數據分布</Link>
+            <Link className= {pathName.includes('stats')? current + ' truncate' : usual + ' truncate'} href = {pathPre + '/stats/tongchi/本紀 第一'}>數據分布</Link>
             <Link className= {pathName.includes('tutorial')? current + ' truncate' : usual + ' truncate'} href = '/tutorial'>使用說明</Link>
             <Link className= {usual + ' truncate'}
                 href = {pathName.startsWith('/not-filtered') ? '/filtered/compRes/tongchi/本紀 第一' : '/not-filtered/compRes/tongchi/本紀 第一'}>
