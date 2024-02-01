@@ -1,7 +1,7 @@
 import * as React from "react"
 import '@/app/globals.css'
-import entoch from "@/entoch.json"
-import chapStruct from "@/chapStruct.json"
+import entoch from "@/jsonBase/entoch.json"
+import chapStruct from "@/jsonBase/chapStruct.json"
 import Link from "next/link"
 import {
     Collapsible,

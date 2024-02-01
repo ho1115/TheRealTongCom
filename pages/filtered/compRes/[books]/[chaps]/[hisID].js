@@ -9,8 +9,8 @@ import Link from "next/link"
 
 import { useRouter } from "next/router";
 
-import entoch from "@/entoch"
-import chapStruct from "@/chapStruct.json"
+import entoch from "@/jsonBase/entoch"
+import chapStruct from "@/jsonBase/chapStruct.json"
 
 
 export async function getServerSideProps(context) {

@@ -10,8 +10,8 @@ import {
 } from "@/components/ui/collapsible"
 import Link from "next/link"
 
-import entoch from "@/entoch"
-import chapStruct from "@/chapStruct.json"
+import entoch from "@/jsonBase/entoch"
+import chapStruct from "@/jsonBase/chapStruct.json"
 
 export async function getServerSideProps(context) {
   const BList = ["通志", "春秋公羊傳", "春秋左傳", "春秋穀梁傳", "通典-邊防篇", "戰國策"]

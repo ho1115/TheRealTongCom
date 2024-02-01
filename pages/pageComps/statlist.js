@@ -1,8 +1,8 @@
 import * as React from "react"
 import '@/app/globals.css'
-import entoch from "@/entoch.json"
-import chapStruct from "@/chapStruct.json"
-import tzByDyn from "@/tzByDyn.json"
+import entoch from "@/jsonBase/entoch.json"
+import chapStruct from "@/jsonBase/chapStruct.json"
+import tzByDyn from "@/jsonBase/tzByDyn.json"
 import Link from "next/link"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 
@@ -20,7 +20,7 @@ import { useEffect } from "react";
 const Statlist = () => {
     const collaTarget = ["tongchi", "gonyang", "zuo", "guliang", "zhanguo", "tongbian"]
     const router = useRouter()
-    const [book, setBook] = React.useState("tongchi");
+    const [bookStat, setBookStat] = React.useState("tongchi");
     const [chapList, setchapList] = React.useState(["empty"]);
 
     function changeBTN(index) {
@@ -46,7 +46,7 @@ const Statlist = () => {
                         <Link key = {subs} className = "w-auto block py-1 pl-8 text-sm hover:bg-neutral-600 " 
                             href = {{
                                 pathname : "./[chaps]",
-                                query :{ books: book, chaps: subs },
+                                query :{ books: bookStat, chaps: subs },
                             }}>{subs}
                         </Link>
                         ))}
@@ -57,7 +57,7 @@ const Statlist = () => {
                     <Link key = {chaps} className = "w-auto block py-1 pl-2 hover:bg-neutral-600 " 
                         href = {{
                             pathname : "./[chaps]",
-                            query :{ books: book, chaps: Object.values(chapList[chaps])[0] },
+                            query :{ books: bookStat, chaps: Object.values(chapList[chaps])[0] },
                         }}>{chaps}
                     </Link>
                 </div>
@@ -74,7 +74,7 @@ const Statlist = () => {
                 <TabsContent value="juan">{Object.keys(chapList).map(chaps => collaConstruct(chaps))}</TabsContent>
                 <TabsContent value="dyn">{Object.entries(tzByDyn).map(([key, value]) => (
                     <Link key = "dyns" className = "w-auto block p-2 my-2 hover:bg-neutral-600 border-b-2 border-sec" 
-                          href = {{pathname : "./[chaps]", query :{ books: book, chaps: `dyn-${key}` },}}>
+                          href = {{pathname : "./[chaps]", query :{ books: bookStat, chaps: `dyn-${key}` },}}>
                         {`${key} (共${value}位傳主)`}</Link>
                     ))}</TabsContent>                
             </Tabs>
@@ -85,7 +85,7 @@ const Statlist = () => {
         return (
             <>
             <Link key = "allGene" className = "w-auto block p-2 hover:bg-neutral-600 border-b-2 border-sec" 
-                  href = {{pathname : "./[chaps]", query :{ books: book, chaps: 'allChaps' }}}>
+                  href = {{pathname : "./[chaps]", query :{ books: bookStat, chaps: 'allChaps' }}}>
                 全卷總覽
             </Link>
             {!inList ?
@@ -93,7 +93,7 @@ const Statlist = () => {
                     <Link key = {chaps} className = "w-auto block p-2 my-2 hover:bg-neutral-600 border-b-2 border-sec" 
                         href = {{
                         pathname : "./[chaps]",
-                        query :{ books: book, chaps: chapList.indexOf(chaps) + 1 },
+                        query :{ books: bookStat, chaps: chapList.indexOf(chaps) + 1 },
                         }}>{chaps}
                     </Link>
                     )
@@ -105,12 +105,13 @@ const Statlist = () => {
     useEffect(()=>{
         if(!router.isReady) {return};  
         const bookName = entoch[router.query.books]
-        setBook(router.query.books)
+        setBookStat(router.query.books)
         setchapList(chapStruct[bookName])
         if(!(router.query.books in entoch)) {
             setchapList(["網址錯誤，無對應史料，請重新查詢，或點擊此處。"])
-            setBook("tongchi")
+            setBookStat("tongchi")
         }
+        
     }, [router.isReady, router.asPath, router.query.books]);
     
     return (
@@ -118,14 +119,14 @@ const Statlist = () => {
     <div className = "inline-flex flex-col w-1/5 m-2 p-2 top-16 h-[calc(100vh-5.5rem)] bg-main">
         <div className = "inline-flex flex-row w-auto min-h-12 border-b-2 mb-2 border-sec font-bold place-items-center justify-around">             
             <select className = "w-full h-full text-xl p-2 rounded text-least mb-2 bg-sec outline-none" id = "hisBook" name = "hisBook"
-                    onChange = {(ele) => {setBook(ele.target.value); setchapList(chapStruct[entoch[ele.target.value]])}} defaultValue={router.query.books}>
+                    onChange = {(ele) => {setBookStat(ele.target.value); setchapList(chapStruct[entoch[ele.target.value]])}} value={bookStat}>
                 {
                     Object.keys(entoch).map(item => (<option key = {item} value = {item}>{entoch[item]}</option> ))
                 }
             </select>
         </div>
         <div className = "w-auto overflow-auto max-h-screen text-least pb-2 px-2 border-l-2 border-minor">
-            {book == "tongchi" ? renderTz() : renderHis(collaTarget.includes(book))} 
+            {bookStat == "tongchi" ? renderTz() : renderHis(collaTarget.includes(bookStat))} 
         </div>
     </div>
     );
