@@ -86,7 +86,7 @@ const Statlist = () => {
             <>
             <Link key = "allGene" className = "w-auto block p-2 hover:bg-neutral-600 border-b-2 border-sec" 
                   href = {{pathname : "./[chaps]", query :{ books: bookStat, chaps: 'allChaps' }}}>
-                全卷總覽
+                全書總覽
             </Link>
             {!inList ?
                 chapList.map(chaps => ( 

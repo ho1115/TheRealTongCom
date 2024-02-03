@@ -18,7 +18,8 @@ export default async function dynStat(dyn, version) {
         "peoCnt" : 0,
         "mCnt" : 0,
         "wCnt" : 0,
-        "hisChapLen" : {}         
+        "hisChapLen" : {},
+        "subInfo" : {},      
     } 
     
     var sql = `SELECT chapter, chapter_number, name, word_count, ${cnt}, ${rela} FROM tongzhi WHERE dynasty = ?`;
@@ -34,25 +35,32 @@ export default async function dynStat(dyn, version) {
         result["mCnt"] += mLen
         result["wCnt"] += tLen
 
-        if (!result[tzChap]) {
-            result[tzChap] = {
-                "matchPeo" : [],
-                "noMatch" : []
+        if (!result["subInfo"][tzChap]) {
+            result["subInfo"][tzChap] = {
+                "matchPeo" : {},
+                "noMatch" : [],
+                "mCnt" : 0,
+                "tCnt" : 0,
+                "hisMatches" : {},
             };
         }
         if (mLen == 0) {
-            result[tzChap]["noMatch"].push(person);
+            result["subInfo"][tzChap]["noMatch"].push(person);
             continue;
         }
-        result[tzChap]["matchPeo"].push(`${person} (${mLen}/${tLen}字)`);
+        result["subInfo"][tzChap]["matchPeo"][person] ={"mCnt" : mLen, "tCnt": tLen}
+        result["subInfo"][tzChap]["mCnt"] += mLen
+        result["subInfo"][tzChap]["tCnt"] += tLen
         Object.values(matchJs).forEach(info => {
             if (!result["hisChapLen"][info["name"]]) {result["hisChapLen"][info["name"]] = hisChLen[info["name"].replace('-', '#')]}
             var hisName = info["name"].split('-')[0]
-            var chapName = info["name"].split('-')[1]
-            if (!result[tzChap][hisName]) {result[tzChap][hisName] = {"people" : []};}
-            if (!result[tzChap][hisName]["people"].includes(person)) {result[tzChap][hisName]["people"].push(person);}
-            if (!result[tzChap][hisName][chapName]) {result[tzChap][hisName][chapName] = {};}
-            result[tzChap][hisName][chapName][person] = mLen
+            var chapName = info["name"].split('-')[1] 
+            if (!result["subInfo"][tzChap]["hisMatches"][hisName]) {result["subInfo"][tzChap]["hisMatches"][hisName] = {"peoArr" : [], "mCnt" : 0, "chapInfo" : {}};}
+            if (!result["subInfo"][tzChap]["hisMatches"][hisName]["chapInfo"][chapName]) {result["subInfo"][tzChap]["hisMatches"][hisName]["chapInfo"][chapName] = {"mCnt" : 0, "peoInfo" : {}};}
+            result["subInfo"][tzChap]["hisMatches"][hisName]["chapInfo"][chapName]["peoInfo"][person] = {"mCnt" : info["count"], "tCnt" : tLen}
+            result["subInfo"][tzChap]["hisMatches"][hisName]["chapInfo"][chapName]["mCnt"] += info["count"]
+            result["subInfo"][tzChap]["hisMatches"][hisName]["mCnt"] += info["count"]
+            if (!result["subInfo"][tzChap]["hisMatches"][hisName]["peoArr"].includes(person)) {result["subInfo"][tzChap]["hisMatches"][hisName]["peoArr"].push(person)}
         })
 
     }

@@ -19,7 +19,8 @@ export default async function juanStat(chap, version) {
         "peoCnt" : 0,
         "mCnt" : 0,
         "wCnt" : 0,  
-        "hisChapLen" : {}
+        "hisChapLen" : {},
+        "subInfo" : {},
     } 
     
     var sql = `SELECT dynasty, name, word_count, ${cnt}, ${rela} FROM tongzhi WHERE chapter = ? and chapter_number = ?`;
@@ -35,25 +36,32 @@ export default async function juanStat(chap, version) {
         result["mCnt"] += mLen
         result["wCnt"] += tLen
 
-        if (!result[dyna]) {
-            result[dyna] = {
-                "matchPeo" : [],
-                "noMatch" : []
+        if (!result["subInfo"][dyna]) {
+            result["subInfo"][dyna] = {
+                "matchPeo" : {},
+                "noMatch" : [],
+                "mCnt" : 0,
+                "tCnt" : 0,
+                "hisMatches" : {}, 
             };
         }
         if (mLen == 0) {
-            result[dyna]["noMatch"].push(person);
+            result["subInfo"][dyna]["noMatch"].push(person);
             continue;
         }
-        result[dyna]["matchPeo"].push(`${person} (${mLen}/${tLen}字)`);
+        result["subInfo"][dyna]["matchPeo"][person] ={"mCnt" : mLen, "tCnt": tLen}
+        result["subInfo"][dyna]["mCnt"] += mLen
+        result["subInfo"][dyna]["tCnt"] += tLen
         Object.values(matchJs).forEach(info => {
             if (!result["hisChapLen"][info["name"]]) {result["hisChapLen"][info["name"]] = hisChLen[info["name"].replace('-', '#')]}
             var hisName = info["name"].split('-')[0]
             var chapName = info["name"].split('-')[1]
-            if (!result[dyna][hisName]) {result[dyna][hisName] = {"people" : []};}
-            if (!result[dyna][hisName]["people"].includes(person)) {result[dyna][hisName]["people"].push(person)}
-            if (!result[dyna][hisName][chapName]) {result[dyna][hisName][chapName] = {};}
-            result[dyna][hisName][chapName][person] = mLen
+            if (!result["subInfo"][dyna]["hisMatches"][hisName]) {result["subInfo"][dyna]["hisMatches"][hisName] = {"peoArr" : [], "mCnt" : 0, "chapInfo" : {}};}            
+            if (!result["subInfo"][dyna]["hisMatches"][hisName]["chapInfo"][chapName]) {result["subInfo"][dyna]["hisMatches"][hisName]["chapInfo"][chapName] = {"mCnt" : 0, "peoInfo" : {}};}
+            result["subInfo"][dyna]["hisMatches"][hisName]["chapInfo"][chapName]["peoInfo"][person] = {"mCnt" : info["count"], "tCnt" : tLen}
+            result["subInfo"][dyna]["hisMatches"][hisName]["chapInfo"][chapName]["mCnt"] += info["count"]
+            result["subInfo"][dyna]["hisMatches"][hisName]["mCnt"] += info["count"]
+            if (!result["subInfo"][dyna]["hisMatches"][hisName]["peoArr"].includes(person)) {result["subInfo"][dyna]["hisMatches"][hisName]["peoArr"].push(person)}
         })
 
     }
