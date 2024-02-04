@@ -16,8 +16,8 @@ import chapStruct from "@/jsonBase/chapStruct.json"
 export async function getServerSideProps(context) {
   const bookName = entoch[context.params.books]
   const IDs = context.params.hisID.split('##')
-  const posts = await allMatches(bookName, IDs[0], 'cut')
-  const conts = bookName == "通志" ? await contentMatches(IDs[0], IDs[1], 'cut') : await contentMatches(IDs[1], IDs[0], 'cut')
+  const posts = await allMatches(bookName, IDs[0], 'all')
+  const conts = bookName == "通志" ? await contentMatches(IDs[0], IDs[1], 'all') : await contentMatches(IDs[1], IDs[0], 'all')
   return { props: { posts, conts } }
 }
 

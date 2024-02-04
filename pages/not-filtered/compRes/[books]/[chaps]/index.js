@@ -19,7 +19,7 @@ export async function getServerSideProps(context) {
   var chapName = context.params.chaps
   if (!BList.includes(bookName) && Object.keys(chapStruct).includes(bookName)) {chapName = chapStruct[bookName][chapName - 1]}
   
-  const posts = await subChapRoute(bookName, chapName, 'cut')
+  const posts = await subChapRoute(bookName, chapName, 'all')
     
   return { props: { posts } }
 }

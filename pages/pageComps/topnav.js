@@ -18,7 +18,7 @@ const Topnav = () => {
       <div className = "inline-flex justify-between w-screen max-w-[100vw] bg-sec sticky top-0 border-b-2 border-minor h-16  font-bold place-items-center">        
         <div className="inline-flex pl-4 w-[25vw] justify-between">
           <Link className = "text-center text-3xl truncate"  href ='/welcome'>通志史料比對系統</Link>
-          <p className = "text-base text-least self-end truncate">(目前檢視版本 : {reVersion})</p>
+          <p className = "text-base text-least self-end truncate">(目前檢視版本 : {pathName.startsWith('/us') || pathName.startsWith('/tut') ? '' : reVersion})</p>
         </div>
         <div>   
           <nav className = "inline-flex pl-4 mr-10 w-[30vw] place-items-center justify-around gap-6 text-lg">
@@ -29,7 +29,7 @@ const Topnav = () => {
                 href = {pathName.startsWith('/not-filtered') ? '/filtered/compRes/tongchi/本紀 第一' : '/not-filtered/compRes/tongchi/本紀 第一'}>
                 {version}
             </Link>
-            <Link className= {pathName.includes('usercompare')? current + ' truncate' : usual + ' truncate'} href = {pathPre + '/usercompare'}>自行比對文字</Link>
+            <Link className= {pathName.includes('usercompare')? current + ' truncate' : usual + ' truncate'} href = '/usercompare'>自行比對文字</Link>
           </nav>
         </div>  
       </div>

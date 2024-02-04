@@ -38,7 +38,7 @@ const Statgeneral = (params) => {
               <button key = {`${key}2`}  className="flex w-full px-2 py-1 border-b-2 border-sec justify-between outline-none hover:bg-minor/20" 
                         onClick = {() => changeHBTN(`HBTN${key}`)} id = {`HBTN${key}`}>
                 <span key = {`${key}3`} className="inline-flex">
-                    <p key = {`${key}4`} className="text-start self-center w-[10vw] text-xl">{`${key}`}</p>       
+                    <p key = {`${key}4`} className="text-start self-center w-[10vw] text-2xl">{`${key}`}</p>       
                 </span>
                 <span key = {`${key}5`} className = "inline-flex">
                     <p key = {`${key}6`} className = "text-start self-center text-base">
@@ -72,7 +72,7 @@ const Statgeneral = (params) => {
           
           Object.values(params.data).sort(sortFunc).map(val => (
             <div key = {val['name'] +'0'} className="justify-between inline-flex w-full pt-4 p-2 border-b-2 border-sec hover:bg-minor/20">
-              <p key = {val['name']} className="w-[50vw] text-xl">{val['name']}</p>
+              <p key = {val['name']} className="w-[50vw] text-2xl">{val['name']}</p>
               <div key = {val['name']+'1'} className="w-[18vw] justify-between inline-flex">
                 <p key = {val['name'] +'2'} className="w-[4vw] text-start text-base">{`${val[`peoCnt${params.version}`]}位傳主`}</p>
                 <p key = {val['name'] +'3'} className="w-[14vw] text-end text-base">{`比對到${val[`mCnt${params.version}`]}字 / 共${val['wCnt']}字`}</p>

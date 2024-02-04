@@ -22,8 +22,8 @@ export async function getServerSideProps(context) {
   if (!BList.includes(bookName) && Object.keys(chapStruct).includes(bookName) && chapName != 'allChaps') {chapName = chapStruct[bookName][chapName - 1]}
   const isTz = bookName == "通志"  ? true : false;
   
-  var tzData = chapName.startsWith("dyn") ? await tzDynStat(chapName.split('-')[1], "cut") : await tzJuanStat(chapName, "cut")
-  const posts = isTz ? tzData : await hisStat(bookName, chapName, "cut");
+  var tzData = chapName.startsWith("dyn") ? await tzDynStat(chapName.split('-')[1], "all") : await tzJuanStat(chapName, "all")
+  const posts = isTz ? tzData : await hisStat(bookName, chapName, "all");
   
   return { props: { posts } }
   
@@ -43,7 +43,7 @@ export default function Home({ posts }) {
   const getHisname = (chName, hisJs) => {
     var res ; 
     Object.values(hisJs).forEach(v => {
-      if (v['name'] == chName) {res = [v['peoCntCut'], v['mCntCut'], v['wCnt']];}
+      if (v['name'] == chName) {res = [v['peoCntAll'], v['mCntAll'], v['wCnt']];}
     })
     return res;
   }
@@ -134,7 +134,7 @@ export default function Home({ posts }) {
                   </select>
               </TabsList>
               <TabsContent value="juan" className = "overflow-auto border-t-2 border-minor w-[75vw] max-h-[77vh] ">
-                <Statgeneral tzbool = {isTz} data = {isTz ? posts : hisGene} method = {sortList} version = "Cut"></Statgeneral>
+                <Statgeneral tzbool = {isTz} data = {isTz ? posts : hisGene} method = {sortList} version = "All"></Statgeneral>
               </TabsContent>
               <TabsContent value="dyn" className = "overflow-auto border-t-2 border-minor w-[75vw] max-h-[77vh]">
                 <Statdetail tzbool = {isTz} data = {generalData} postdata = {posts} method = {sortDetail}></Statdetail>
