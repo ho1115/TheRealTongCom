@@ -15,6 +15,7 @@ export default async function contentMatches(TID, HID, version) {
    
     var sql = `SELECT match_info FROM ${relationTable} WHERE tongzhi_ID = ? and official_history_ID = ?`;
     var qRes = await conn.promise().query(sql, [TID, HID])
+    
     result['matchArrs'] =  JSON.parse(qRes[0][0]['match_info']);
 
     sql = `SELECT content, word_count, name, chapter, chapter_number FROM tongzhi WHERE DBID = ?`;

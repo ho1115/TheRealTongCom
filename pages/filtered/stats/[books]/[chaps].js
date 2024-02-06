@@ -8,7 +8,7 @@ import tzDynStat from "@/pages/api/tzDynStat"
 import tzJuanStat from "@/pages/api/tzJuanStat"
 import Statgeneral from "@/pages/pageComps/statgene";
 import Statdetail from "@/pages/pageComps/statdetail";
-
+import Head from "next/head";
 import { useRouter } from "next/router";
 import { useState } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
@@ -93,6 +93,9 @@ export default function Home({ posts }) {
  
   return  (
     <div className = "inline-flex flex-wrap bg-main text-least" id = "whole">
+      <Head>
+        <title>通志史料比對系統</title>
+      </Head>
       <div className = "w-screen sticky top-0 h-16">
         <Topnav />
       </div>

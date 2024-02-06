@@ -6,7 +6,7 @@ import Footer from "@/pages/pageComps/footer"
 import allMatches from "@/pages/api/compMatches"
 import contentMatches from "@/pages/api/contentDetail"
 import Link from "next/link"
-
+import Head from "next/head";
 import { useRouter } from "next/router";
 
 import entoch from "@/jsonBase/entoch"
@@ -52,12 +52,6 @@ export default function Home({ posts, conts }) {
     text.scrollIntoView({ behavior: "smooth", block: "center", inline: "nearest"});
   }
 
-  function loadComplete(boxID) {
-    const box = document.getElementById(boxID);
-    box.removeChild(box.firstChild.firstChild)
-  }
-
-
   const alignBuilder = (matchJs, prefix, pos) => {
     const reversPos = pos == 'R' ? 'L' : 'R'
     return (
@@ -75,6 +69,9 @@ export default function Home({ posts, conts }) {
 
   return  (
         <div className = "inline-flex flex-wrap bg-main text-least" id = "whole">
+          <Head>
+        <title>通志史料比對系統</title>
+      </Head>
       <div className = "w-screen sticky top-0 h-16">
         <Topnav />
       </div>
@@ -126,7 +123,7 @@ export default function Home({ posts, conts }) {
                   <p>{!tzOnLeft ? `比對${posts[router.query.hisID.split('##')[1]]['mLen']}字 / 共${conts['tongLen']}字`: 
                                   `比對${posts[router.query.hisID.split('##')[1]]['mLen']}字 / 共${conts['hisLen']}字`}</p>
                 </div>
-                <div className="p-2 overflow-auto max-h-[72vh] text-lg" id = "RBox" onChange= {() => loadComplete('RBox')}>
+                <div className="p-2 overflow-auto max-h-[72vh] text-lg" id = "RBox">
                   
                   {!tzOnLeft ? alignBuilder(conts, 'tong', 'R'): alignBuilder(conts, 'his', 'R')}
                 </div>

@@ -1,5 +1,6 @@
 import * as React from "react"
 import Link from "next/link"
+import Image from "next/image";
 import '@/app/globals.css'
 import { useRouter } from "next/router";
 
@@ -16,9 +17,17 @@ const Topnav = () => {
 
     return (
       <div className = "inline-flex justify-between w-screen max-w-[100vw] bg-sec sticky top-0 border-b-2 border-minor h-16  font-bold place-items-center">        
-        <div className="inline-flex pl-4 w-[25vw] justify-between">
-          <Link className = "text-center text-3xl truncate"  href ='/welcome'>通志史料比對系統</Link>
-          <p className = "text-base text-least self-end truncate">(目前檢視版本 : {pathName.startsWith('/us') || pathName.startsWith('/tut') ? '' : reVersion})</p>
+        <div className="inline-flex pl-4 w-[30vw] justify-between">
+          <Link className = "text-center text-3xl truncate inline-flex"  href ='/'>
+            <Image
+              className = "rounded pr-4"
+              src = "/doro.png"
+              width = {80}
+              height = {20}
+              alt = "jcnBCL.jpg"
+            /><p className=" self-center">通志史料比對系統</p>
+          </Link>
+          <p className = "text-base text-least self-end truncate">{pathName.startsWith('/us') || pathName.startsWith('/tut')  || pathName.startsWith('/af') ? '' : `目前檢視版本 : ${reVersion}`}</p>
         </div>
         <div>   
           <nav className = "inline-flex pl-4 mr-10 w-[30vw] place-items-center justify-around gap-6 text-lg">

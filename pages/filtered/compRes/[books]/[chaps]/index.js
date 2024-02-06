@@ -9,9 +9,10 @@ import {
   CollapsibleTrigger,
 } from "@/components/ui/collapsible"
 import Link from "next/link"
-
+import Head from 'next/head'
 import entoch from "@/jsonBase/entoch"
 import chapStruct from "@/jsonBase/chapStruct.json"
+
 
 export async function getServerSideProps(context) {
   const BList = ["通志", "春秋公羊傳", "春秋左傳", "春秋穀梁傳", "通典-邊防篇", "戰國策"]
@@ -144,7 +145,11 @@ export default function Home({ posts }) {
   }
 
   return  (
+    
     <div className = "inline-flex flex-wrap bg-main text-least" id = "whole">
+      <Head>
+        <title>通志史料比對系統</title>
+      </Head>
       <div className = "w-screen sticky top-0 h-16">
         <Topnav />
       </div>

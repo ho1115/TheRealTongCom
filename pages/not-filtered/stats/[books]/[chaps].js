@@ -14,6 +14,7 @@ import { useState } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import entoch from "@/jsonBase/entoch.json"
 import chapStruct from "@/jsonBase/chapStruct.json"
+import Head from "next/head";
 
 export async function getServerSideProps(context) {
   const bookName = entoch[context.params.books]
@@ -93,6 +94,9 @@ export default function Home({ posts }) {
  
   return  (
     <div className = "inline-flex flex-wrap bg-main text-least" id = "whole">
+      <Head>
+        <title>通志史料比對系統</title>
+      </Head>
       <div className = "w-screen sticky top-0 h-16">
         <Topnav />
       </div>
