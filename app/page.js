@@ -1,7 +1,7 @@
 import Link from 'next/link'
 import Image from 'next/image'
 import Footer from '@/pages/pageComps/footer'
-
+// logo from https://wepik.com/ , https://onlinejpgtools.com/make-jpg-transparent
 export default function Home() {
   return  (
     <div className = "bg-main inline-flex justify-center min-w-[100vw] min-h-[100vh] text-least">
@@ -16,13 +16,13 @@ export default function Home() {
           />
           <div className = "inline-flex">
             <Image
-              className = "rounded pr-4 h-[80px] self-center"
-              src = "/doro.png"
-              width = {100}
-              height = {30}
+              className = "rounded pr-4 pt-4 self-center"
+              src = "/logo.png"
+              width = {120}
+              height = {120}
               alt = "jcnBCL.jpg"
             />
-            <p className = 'w-full text-[3.5rem] text-center pt-2 mt-2 inline-flex'>通志史料比對系統</p>
+            <p className = 'w-full text-[3rem] text-center pt-2 mt-2 inline-flex'>通志史料比對系統</p>
           </div>
         </div>
         <div className = 'h-[70vh] inline-flex flex-col justify-around ml-4'>

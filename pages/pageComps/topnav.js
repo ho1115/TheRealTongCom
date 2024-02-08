@@ -21,9 +21,9 @@ const Topnav = () => {
           <Link className = "text-center text-3xl truncate inline-flex"  href ='/'>
             <Image
               className = "rounded pr-4"
-              src = "/doro.png"
-              width = {80}
-              height = {20}
+              src = "/logo.png"
+              width = {100}
+              height = {100}
               alt = "jcnBCL.jpg"
             /><p className=" self-center">通志史料比對系統</p>
           </Link>
