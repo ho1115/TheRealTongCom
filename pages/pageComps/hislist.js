@@ -2,6 +2,8 @@ import * as React from "react"
 import '@/app/globals.css'
 import entoch from "@/jsonBase/entoch.json"
 import chapStruct from "@/jsonBase/chapStruct.json"
+import tVol from "@/jsonBase/tzVol.json"
+import tDyn from "@/jsonBase/tzVolDyn.json"
 import Link from "next/link"
 import {
     Collapsible,
@@ -26,7 +28,7 @@ const Sidelist = () => {
             ele.innerText = ele.innerText == String.fromCharCode(0x25B2) ? String.fromCharCode(0x25BC) : String.fromCharCode(0x25B2);
         }
     }
-    const collaConstruct = (chaps) => {
+    const collaConstruct = (chaps, tzBool) => {
         return (
             chapList[chaps].length > 1 ?
                 <Collapsible key = {`${chaps}00`}>
@@ -44,7 +46,7 @@ const Sidelist = () => {
                             href = {{
                                 pathname : "./[chaps]",
                                 query :{ books: book, chaps: subs },
-                            }}>{subs}
+                            }}>{tzBool ? `${subs} (第${tVol[subs]}卷, ${tDyn[tVol[subs]]})` : subs}
                         </Link>
                         ))}
                     </CollapsibleContent>
@@ -58,6 +60,51 @@ const Sidelist = () => {
                         }}>{chaps}
                     </Link>
                 </div>
+        )
+    }
+
+    const preNextBTN = () => {
+        
+        const tarCh = router.query.chaps
+        const bk = router.query.books
+        var mergedArr = []
+        var thisIdx = -1
+        if (collaTarget.includes(bk)) {
+            let bkCh = entoch[bk]
+            Object.values(chapStruct[bkCh]).map((chaps) => (mergedArr = mergedArr.concat(chaps)));
+            thisIdx = mergedArr.indexOf(tarCh);
+        }
+        return (
+            !collaTarget.includes(bk) ?
+                <div className = "inline-flex justify-around w-full border-b-2 border-minor pb-2">
+                    <Link key = {tarCh} className = "w-auto block p-2 hover:bg-neutral-600 rounded" 
+                        href = {{
+                        pathname : "./[chaps]",
+                        query :{ books: bk, chaps: tarCh == 1 ? 1 : tarCh - 1},
+                        }}>＜- 前往上一卷
+                    </Link>
+                    <Link key = {tarCh} className = "w-auto block p-2 hover:bg-neutral-600 rounded" 
+                        href = {{
+                        pathname : "./[chaps]",
+                        query :{ books: bk, chaps: tarCh == chapList.length ? tarCh : parseInt(tarCh) + 1},
+                        }}>前往下一卷 -＞
+                    </Link>
+                </div>
+                 :
+                 <div className = "inline-flex justify-around w-full border-b-2 border-minor pb-2">
+                    <Link key = {tarCh} className = "w-auto block p-2 hover:bg-neutral-600 rounded" 
+                        href = {{
+                        pathname : "./[chaps]",
+                        query :{ books: bk, chaps: thisIdx == 0 ? mergedArr[thisIdx] :  mergedArr[thisIdx-1]},
+                        }}>＜- 前往上一卷
+                    </Link>
+                    <Link key = {tarCh} className = "w-auto block p-2 hover:bg-neutral-600 rounded" 
+                        href = {{
+                        pathname : "./[chaps]",
+                        query :{ books: bk, chaps: thisIdx == mergedArr.length-1 ?  mergedArr[thisIdx] :  mergedArr[thisIdx+1]},
+                        }}>前往下一卷 -＞
+                    </Link>
+             </div>
         )
     }
 
@@ -83,6 +130,7 @@ const Sidelist = () => {
                 }
             </select>
         </div>
+        <div>{preNextBTN()}</div>
         <div className = "w-auto overflow-auto max-h-screen text-least pb-2 px-2 border-l-2 border-minor">
             {
             !collaTarget.includes(book) ?
@@ -94,7 +142,7 @@ const Sidelist = () => {
                         }}>{chaps}
                     </Link>
                     )
-                ) : Object.keys(chapList).map(chaps => collaConstruct(chaps))}
+                ) : Object.keys(chapList).map(chaps => collaConstruct(chaps, book == "tongchi"))}
         </div>
     </div>
     );

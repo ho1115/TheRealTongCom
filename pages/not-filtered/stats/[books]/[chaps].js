@@ -8,13 +8,12 @@ import tzDynStat from "@/pages/api/tzDynStat"
 import tzJuanStat from "@/pages/api/tzJuanStat"
 import Statgeneral from "@/pages/pageComps/statgene";
 import Statdetail from "@/pages/pageComps/statdetail";
-
+import Head from "next/head";
 import { useRouter } from "next/router";
 import { useState } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import entoch from "@/jsonBase/entoch.json"
 import chapStruct from "@/jsonBase/chapStruct.json"
-import Head from "next/head";
 
 export async function getServerSideProps(context) {
   const bookName = entoch[context.params.books]
@@ -37,9 +36,9 @@ export default function Home({ posts }) {
   const isTz = bookName == "通志"  ? true : false;
   var chapName = router.query.chaps;
   const hisGene = (isTz || router.query.books == undefined) ? 'tz' : require(`@/jsonBase/${router.query.books}.json`);
+  const tclBool = chapName.startsWith('dyn')
   if (chapName != undefined && chapName.startsWith('dyn')) {chapName = chapName.split('-')[1]}
   else if (!BList.includes(bookName) && Object.keys(chapStruct).includes(bookName) && chapName != 'allChaps') {chapName = chapStruct[bookName][chapName - 1];}
-
   
   const getHisname = (chName, hisJs) => {
     var res ; 
@@ -66,7 +65,7 @@ export default function Home({ posts }) {
     })
   } else {
     var peoSets = {}
-    Object.values(posts["subInfo"]).forEach(value => {
+    Object.entries(posts["subInfo"]).forEach(([chKey, value]) => {
         Object.entries(value["hisMatches"]).forEach(([subKey, subValue]) => {
           if (!generalData[subKey]) {generalData[subKey] = { "hisSubChaps" : {}, "pCnt" : 0, "mCnt" : 0};}
           if (!peoSets[subKey]) {peoSets[subKey] = []}
@@ -76,7 +75,14 @@ export default function Home({ posts }) {
             generalData[subKey]["mCnt"] += chapValue["mCnt"];
             Object.entries(chapValue["peoInfo"]).forEach(([peoName, peoMcnt]) => {
               if (!generalData[subKey]["hisSubChaps"][chapKey]["peoInfo"][peoName]) {
-                generalData[subKey]["hisSubChaps"][chapKey]["peoInfo"][peoName] = {"mCnt" : 0, "tCnt" : peoMcnt["tCnt"]};}
+                generalData[subKey]["hisSubChaps"][chapKey]["peoInfo"][peoName] = 
+                  {
+                    "mCnt" : 0, 
+                    "tCnt" : peoMcnt["tCnt"], 
+                    "peoID" : peoMcnt["peoID"], 
+                    "hisID" : peoMcnt["hisID"],
+                    "tzCh" : chKey
+                  }}
               generalData[subKey]["hisSubChaps"][chapKey]["peoInfo"][peoName]["mCnt"] += peoMcnt["mCnt"];
               if (!peoSets[subKey].includes(peoName)) {
                 peoSets[subKey].push(peoName);
@@ -107,7 +113,8 @@ export default function Home({ posts }) {
             isTz ? 
             <div className= "p-2 my-2 w-auto inline-flex border-l-2 border-minor">
               <p className= "text-xl">{`${bookName} - ${chapName} : `}</p>
-              <p className= "w-[20vw] ml-4 text-lg self-end">{`${posts['peoCnt']}位傳主 , ${posts['mCnt']}字已比對 / 共${posts['wCnt']}字`}</p>
+              <p className= "w-[20vw] ml-4 text-lg self-end">{`${posts['peoCnt']}位傳主 , 比對到${posts['mCnt']}字 / 共${posts['wCnt']}字`}</p>
+              <p className = "text-sm text-red-400 self-end">(比對字數不重複計算重疊的比對部分)</p>
             </div> :
             chapName == 'allChaps' ?
               <div className= "p-2 my-2 w-full inline-flex border-l-2 border-minor">
@@ -117,7 +124,8 @@ export default function Home({ posts }) {
              : 
               <div className= "p-2 my-2 w-auto inline-flex border-l-2 border-minor">
                 <p className= "text-xl">{`${bookName} - ${chapName} : `}</p>
-                <p className= "w-[20vw] ml-4 text-lg self-end">{`${hisP[0]}位傳主 , ${hisP[1]}字已比對 / 共${hisP[2]}字`}</p>
+                <p className= "w-[20vw] ml-4 text-lg self-end">{`${hisP[0]}位傳主 , 比對到${hisP[1]}字 / 共${hisP[2]}字`}</p>
+                <p className = "text-sm text-red-400 self-end">(比對字數不重複計算重疊的比對部分)</p>
               </div>
           }
           
@@ -138,10 +146,13 @@ export default function Home({ posts }) {
                   </select>
               </TabsList>
               <TabsContent value="juan" className = "overflow-auto border-t-2 border-minor w-[75vw] max-h-[77vh] ">
-                <Statgeneral tzbool = {isTz} data = {isTz ? posts : hisGene} method = {sortList} version = "All"></Statgeneral>
+                <Statgeneral tzbool = {isTz} data = {isTz ? posts : hisGene} method = {sortList} tzChLink = {tclBool ? "dyn" : chapName}
+                            books = {router.query.books} linkBool = {BList.includes(bookName)} chBkName = {bookName}
+                            version = "All"></Statgeneral>
               </TabsContent>
               <TabsContent value="dyn" className = "overflow-auto border-t-2 border-minor w-[75vw] max-h-[77vh]">
-                <Statdetail tzbool = {isTz} data = {generalData} postdata = {posts} method = {sortDetail}></Statdetail>
+                <Statdetail tzbool = {isTz} data = {generalData} postdata = {posts} tzChLink = {tclBool ? "dyn" : chapName}
+                method = {sortDetail}></Statdetail>
               </TabsContent>                
           </Tabs>
         </div>

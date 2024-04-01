@@ -223,7 +223,7 @@ function make4gram (text) {
 
 export default function textCompare(tonchiContent, historyContent) {
 
-    // if (tonchiContent.length > 30000 || historyContent.length > 30000) {return "error:tooLong"}
+    if (tonchiContent.length > 30000 || historyContent.length > 30000) {return "error:tooLong"}
     if (tonchiContent.length < 10 || historyContent.length < 10) {return "error:tooShort"}
 
     const clearT = removeSymbol(tonchiContent)

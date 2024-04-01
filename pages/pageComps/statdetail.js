@@ -1,5 +1,6 @@
 import * as React from "react"
 import '@/app/globals.css'
+import Link from "next/link"
 
 import {
     Collapsible,
@@ -46,7 +47,7 @@ const Statdetail = (params) => {
     return (
         <div className = "block px-4 w-[74vw] mt-2">{
             params.tzbool ? <React.Fragment key = "????"> 
-                <Collapsible key = "gene0" > 
+                <Collapsible key = "gene0" defaultOpen = {true}> 
                   <CollapsibleTrigger asChild key = "gene1">
                     <button key = "gene2"  className="flex w-full px-2 py-1 border-b-2 border-sec justify-between outline-none hover:bg-minor/20" 
                               onClick = {() => changeGBTN("genebtn")} >
@@ -58,12 +59,19 @@ const Statdetail = (params) => {
                   </CollapsibleTrigger>        
                   <CollapsibleContent key = "gene0" className="rounded block m-2 w-full text-least">
                     {Object.entries(params.data).sort(sortFunc).map(([historyName, historyInfo]) => (
-                        <React.Fragment key = {`${historyName}**0`}><div key = {`${historyName}**20`} className = "w-full block py-2 pl-4 text-base">                  
-                            <div key = {`${historyName}**1`} className="text-xl px-2 mb-2 border-l-2 border-minor inline-flex">
-                                <p key = {`${historyName}**2`}>{historyName}</p>
-                                <p key = {`${historyName}**3`} className = "pl-4">{`${historyInfo["pCnt"]}位傳主 共比對${historyInfo["mCnt"]}字 :`}</p>
-                            </div>
-                            <div key = {`${historyName}**4`} className = "w-full block flex-wrap py-2 text-base">
+                        <React.Fragment key = {`${historyName}**0`}>
+                          <Collapsible key = {`${historyName}**20`} className = "w-full block py-2 pl-4 text-base" defaultOpen = {true}> 
+                            <CollapsibleTrigger asChild key = {`${historyName}g123`}>           
+                              <button key = {`${historyName}**1`} className="text-xl px-2 py-2 mb-2 border-b-2 border-minor/50 inline-flex hover:bg-minor/20" 
+                                    onClick = {() => changeGBTN(`${historyName}gbtn`)}>
+                                <span key = {`${historyName}ff**3`} className="inline-flex justify-between w-full">
+                                  <p key = {`${historyName}**2`}>{historyName}</p>
+                                  <p key = {`${historyName}**3`} className = "pl-4">{`${historyInfo["pCnt"]}位傳主 共比對${historyInfo["mCnt"]}字 :`}</p>
+                                  <p key = {`${historyName}*s*3`} className = "text-start self-center text-lg ml-2 w-[1vw] text-minor" id = {`${historyName}gbtn`}>&#9660;</p>
+                                </span>
+                              </button>
+                            </CollapsibleTrigger>
+                            <CollapsibleContent key = {`${historyName}**4`} className = "w-full block flex-wrap py-2 text-base">
                                 { 
                                 Object.entries(historyInfo["hisSubChaps"])
                                     .sort(tzBChapSortFunc)
@@ -78,18 +86,26 @@ const Statdetail = (params) => {
                                     </div>
                                     <div key = {`${chapKey}##4`} className = "pl-4 pt-4 inline-flex flex-wrap">
                                         {Object.entries(chapValue["peoInfo"]).sort(function ([,a], [,b]) {return b['mCnt'] - a['mCnt'];}).map(([pName, pInfo]) => (
-                                        <p key = {`${pName}##5`}className="pl-4 pb-2 self-center">{` ${pName} (${pInfo['mCnt']} / ${pInfo["tCnt"]}字), `}</p>
+                                          <Link key = {`${pName}##5`}className="pl-4 pb-2 self-center underline-offset-2 hover:underline"
+                                                href = {{
+                                                  pathname : "../../compRes/[books]/[chaps]/[hisID]",
+                                                  query :{ books: "tongchi", chaps: params.tzChLink === "dyn" ? pInfo['tzCh'] : params.tzChLink, 
+                                                            hisID : `${pInfo['peoID']}##${pInfo['hisID']}`},
+                                                }}
+                                                target="_blank">
+                                            {` ${pName} (${pInfo['mCnt']} / ${pInfo["tCnt"]}字), `}
+                                          </Link>
                                         ))}
                                     </div>
                                   </div>
                                 ))}                     
-                            </div>
-                        </div></React.Fragment>
+                            </CollapsibleContent>
+                        </Collapsible></React.Fragment>
                     ))}
                   </CollapsibleContent>
                 </Collapsible>
                 {Object.entries(params.postdata["subInfo"]).sort(tzSortFunc).map(([key, value]) => (
-                <Collapsible key = {`${key}0`} > 
+                <Collapsible key = {`${key}0`} defaultOpen = {true}> 
                   <CollapsibleTrigger asChild key = {`${key}1`}>
                     <button key = {`${key}2`}  className="flex w-full px-2 py-1 border-b-2 border-sec justify-between outline-none hover:bg-minor/20" 
                               onClick = {() => changeHBTN(`HBTN${key}`)} id = {`HBTN${key}`}>
@@ -107,12 +123,19 @@ const Statdetail = (params) => {
                   </CollapsibleTrigger>        
                   <CollapsibleContent key = {`${key}9`} className="rounded block m-2 w-full text-least">
                     {Object.entries(value["hisMatches"]).sort(tzBookSortFunc).map(([historyName, historyInfo]) => (
-                        <React.Fragment key = {`${historyName}#0`}><div key = {`${historyName}20`} className = "w-full block py-2 pl-4 text-base">                  
-                            <div key = {`${historyName}12`} className="text-xl px-2 border-l-2 mb-2 border-minor inline-flex">
-                                <p key = {`${historyName}21`}>{historyName}</p>
-                                <p key = {`${historyName}22`} className = "pl-4">{`${historyInfo["peoArr"].length}位傳主 共比對${historyInfo["mCnt"]}字 :`}</p>
-                            </div>
-                            <div key = {`${historyName}10`} className = "w-full block flex-wrap py-2 text-base">
+                        <React.Fragment key = {`${historyName}#0`}>
+                          <Collapsible key = {`${historyName}20`} className = "w-full block py-2 pl-4 text-base"  defaultOpen = {true}>    
+                            <CollapsibleTrigger asChild key = {`${historyName}1${key}`}>              
+                              <button key = {`${historyName}12`} className="text-xl px-2 border-b-2 mb-2 py-2 border-minor/50 inline-flex hover:bg-minor/20"
+                                       onClick = {() => changeGBTN(`${historyName + key}gbtn`)}>
+                                <span key = {`${historyName + key}**3`} className="inline-flex justify-between w-full">
+                                  <p key = {`${historyName}21`}>{historyName}</p>
+                                  <p key = {`${historyName}22`} className = "pl-4">{`${historyInfo["peoArr"].length}位傳主 共比對${historyInfo["mCnt"]}字 :`}</p>
+                                  <p key = {`${historyName + key}*s*3`} className = "text-start self-center text-lg ml-2 w-[1vw] text-minor" id = {`${historyName + key}gbtn`}>&#9660;</p>
+                                </span>
+                              </button>
+                            </CollapsibleTrigger>
+                            <CollapsibleContent key = {`${historyName}10`} className = "w-full block flex-wrap py-2 text-base">
                                 { 
                                 Object.entries(historyInfo["chapInfo"])
                                     .sort(tzBChapSortFunc)
@@ -127,13 +150,21 @@ const Statdetail = (params) => {
                                     </div>
                                     <div key = {`${chapKey}26`} className = "pl-4 pt-4 inline-flex flex-wrap">
                                         {Object.entries(chapValue["peoInfo"]).sort(function ([,a], [,b]) {return b['mCnt'] - a['mCnt'];}).map(([pName, pInfo]) => (
-                                        <p key = {`${pName}`}className="pl-4 pb-2 self-center">{` ${pName} (${pInfo['mCnt']} / ${pInfo["tCnt"]}字), `}</p>
+                                          <Link key = {`${pName}`} className="pl-4 pb-2 self-center underline-offset-2 hover:underline"
+                                                href = {{
+                                                pathname : "../../compRes/[books]/[chaps]/[hisID]",
+                                                query :{ books: "tongchi", chaps: params.tzChLink === "dyn" ? key : params.tzChLink, 
+                                                      hisID : `${pInfo['peoID']}##${pInfo['hisID']}`},
+                                                }}
+                                                target="_blank">
+                                            {` ${pName} (${pInfo['mCnt']} / ${pInfo["tCnt"]}字), `}
+                                          </Link>
                                         ))}
                                     </div>
                                   </div>
                                 ))}                     
-                            </div>
-                        </div></React.Fragment>
+                            </CollapsibleContent>
+                        </Collapsible></React.Fragment>
                     ))}
                   </CollapsibleContent>
                 </Collapsible>
@@ -142,7 +173,7 @@ const Statdetail = (params) => {
             : 
             
             Object.entries(params.data).sort(sortFunc).map(([key, value]) => (
-            <Collapsible key = {`${key}0`}>
+            <Collapsible key = {`${key}0`} defaultOpen = {true}>
                 <CollapsibleTrigger asChild key = {`${key}1`}>
                     <button key = {`${key}2`}  className="flex w-full px-2 pb-1 border-b-2 border-sec justify-between outline-none hover:bg-minor/20" 
                             onClick = {() => changeHBTN(`HBTN${key}`)} id = {`HBTN${key}`}>
@@ -166,13 +197,29 @@ const Statdetail = (params) => {
                                 Object.entries(params.postdata[key][["pInfo"]])
                                 .sort(function ([,a], [,b]) {return b['mCnt'] - a['mCnt'];})
                                 .map(([subKey, subValue]) => (
-                                    <p key = {`${key}13`} className="pl-4 pt-4 self-center"> {`${subKey} (${subValue['mCnt']}/ ${subValue['wCnt']}字),`}</p>
+                                    <Link key = {`${subKey}13`} 
+                                          className="pl-4 pt-4 self-center underline-offset-2 hover:underline"
+                                          href = {{pathname : "../../compRes/[books]/[chaps]/[hisID]",
+                                          query :{ books: "tongchi", chaps: key, hisID: `${subValue['peoID']}##${subValue['hisID']}` }}}
+                                          target="_blank"
+                                          > 
+                                          {`${subKey} (${subValue['mCnt']}/ ${subValue['wCnt']}字),`}
+                                  </Link>
                             ))}                     
                         </div>
                     </div>
                     <div key = {`${key}14`} className = "w-full mt-2 block py-2 pl-4 text-base">
                         <p key = {`${key}15`} className = "text-lg border-l-2 border-minor pl-2">{`無比對結果之傳主 :`}</p>
-                        <p key = {`${key}16`} className = "pl-4 pt-4">{Object.values(params.postdata[key]["noMatch"]).map(per => (`${per} / `))}</p>
+                        {
+                          Object.values(params.postdata[key]["noMatch"]).map(per => (
+                            <Link key = {`${key}16${per}`} className = "pl-4 pt-4 underline-offset-2 hover:underline"
+                                  href = {{pathname : "../../compRes/[books]/[chaps]/[hisID]",
+                                  query :{ books: "tongchi", chaps: key, hisID: `${per.split('###')[1]}##zeroMatch` }}}
+                                  target="_blank"
+                            >{per.split('###')[0] + ','}
+                            </Link>
+                          ))
+                        }
                     </div>
                 </CollapsibleContent>     
             </Collapsible>

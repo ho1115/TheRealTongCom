@@ -8,8 +8,8 @@ export default function MyApp({ Component, pageProps }) {
     const [loading, setLoad] = React.useState(false);
 
     useEffect(() => {
-        const startTrans = (path) => {(path != router.asPath) && setLoad(true);}
-        const finishTrans = (path) => {(path == router.asPath) && setLoad(false);}
+        const startTrans = () => {setLoad(true);}
+        const finishTrans = () => {setLoad(false);}
 
         router.events.on('routeChangeStart', startTrans)
         router.events.on('routeChangeComplete', finishTrans)

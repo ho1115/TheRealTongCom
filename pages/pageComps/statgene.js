@@ -1,5 +1,7 @@
 import * as React from "react"
 import '@/app/globals.css'
+import Link from "next/link"
+import chapStruct from "@/jsonBase/chapStruct.json"
 
 import {
   Collapsible,
@@ -16,7 +18,6 @@ const Statgeneral = (params) => {
         ele.innerText = ele.innerText == String.fromCharCode(0x25B2) ? String.fromCharCode(0x25BC) : String.fromCharCode(0x25B2);
     }
   }
-  
   var sortFunc = (a, b) => {return 0;};
   var tzSortFunc = (a, b) => {return 0;};
 
@@ -28,12 +29,12 @@ const Statgeneral = (params) => {
     sortFunc = (a, b) => {return b[`mCnt${params.version}`] - a[`mCnt${params.version}`];};
     tzSortFunc = ([,a], [,b]) => {return b["mCnt"] - a["mCnt"];};
   }
-
+  
   return (
       <div className = "block px-4 w-[74vw] mt-2">{
         params.tzbool ? 
         Object.entries(params.data["subInfo"]).sort(tzSortFunc).map(([key, value]) => (
-          <Collapsible key = {`${key}0`} > 
+          <Collapsible key = {`${key}0`} defaultOpen = {true}> 
             <CollapsibleTrigger asChild key = {`${key}1`}>
               <button key = {`${key}2`}  className="flex w-full px-2 py-1 border-b-2 border-sec justify-between outline-none hover:bg-minor/20" 
                         onClick = {() => changeHBTN(`HBTN${key}`)} id = {`HBTN${key}`}>
@@ -57,13 +58,30 @@ const Statgeneral = (params) => {
                         Object.entries(value["matchPeo"])
                           .sort(function ([,a], [,b]) {return b['mCnt'] - a['mCnt'];})
                           .map(([subKey, subValue]) => (
-                            <p key = {`${key}13`} className="pl-4 pt-4 self-center"> {`${subKey} (${subValue['mCnt']} / ${subValue['tCnt']}字), `}</p>
+                            <Link key = {`${subKey}13`} className="pl-4 pt-4 self-center underline-offset-2 hover:underline"
+                            href = {{
+                              pathname : "../../compRes/[books]/[chaps]/[hisID]",
+                              query :{ books: "tongchi", chaps: params.tzChLink === "dyn" ? key : params.tzChLink, hisID : `${subValue['peoID']}##plzSelect`},
+                            }}
+                             target="_blank"> 
+                              {`${subKey} (${subValue['mCnt']} / ${subValue['tCnt']}字), `}
+                            </Link>
                         ))}                     
                   </div>
               </div>
               <div key = {`${key}14`} className = "w-full mt-2 block py-2 pl-4 text-base">
-                <p key = {`${key}15`} className = "text-lg border-l-2 border-minor pl-2">{`無比對結果之傳主 :`}</p>
-                <p key = {`${key}16`} className = "pl-4 pt-4">{value["noMatch"].map(per => (`${per} / `))}</p>
+                <p key = {`${key}15`} className = "text-lg border-l-2 border-minor pl-2">{`無比對結果之傳主 :`}</p> 
+                {
+                  value["noMatch"].map(per => (
+                    <Link key = {`${key}16`} className = "pl-4 pt-4 underline-offset-2 hover:underline"
+                          href = {{
+                          pathname : "../../compRes/[books]/[chaps]/[hisID]",
+                          query :{ books: "tongchi", chaps: params.tzChLink === "dyn" ? key : params.tzChLink, hisID : `${per.split('###')[1]}##zeroMatch`},
+                        }}
+                     target="_blank">
+                      {per.split('###')[0] + ','}
+                    </Link>))
+                }
               </div>
             </CollapsibleContent>
           </Collapsible>
@@ -71,13 +89,18 @@ const Statgeneral = (params) => {
           :
           
           Object.values(params.data).sort(sortFunc).map(val => (
-            <div key = {val['name'] +'0'} className="justify-between inline-flex w-full pt-4 p-2 border-b-2 border-sec hover:bg-minor/20">
+            <Link key = {val['name'] +'0'} className="justify-between inline-flex w-full pt-4 p-2 border-b-2 border-sec hover:bg-minor/20"
+                  href = {{
+                    pathname : "../../compRes/[books]/[chaps]",
+                    query :{ books: params.books, chaps: params.linkBool ? val['name'] : chapStruct[params.chBkName].indexOf(val['name']) + 1},
+                  }}
+                   target="_blank">
               <p key = {val['name']} className="w-[50vw] text-2xl">{val['name']}</p>
               <div key = {val['name']+'1'} className="w-[18vw] justify-between inline-flex">
                 <p key = {val['name'] +'2'} className="w-[4vw] text-start text-base">{`${val[`peoCnt${params.version}`]}位傳主`}</p>
                 <p key = {val['name'] +'3'} className="w-[14vw] text-end text-base">{`比對到${val[`mCnt${params.version}`]}字 / 共${val['wCnt']}字`}</p>
               </div>
-            </div>                
+            </Link>                
             ))}
         </div>
     );

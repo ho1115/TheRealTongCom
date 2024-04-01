@@ -70,6 +70,7 @@ async function tzChaps(chapName, version){
     }   
     var sql = 'SELECT DBID, dynasty, name, word_count, ' + relationCol + ', ' + cnt + ' FROM tongzhi WHERE chapter = ? and chapter_number = ?'
     var targetChap = chapName.split(' ')
+    if (targetChap.length === 3) {targetChap[1] = targetChap[1] + ' ' + targetChap[2]}
     var qRes = await conn.promise().query(sql, [targetChap[0], targetChap[1]]);
     for (let i = 0; i < qRes[0].length; i++) {
         
@@ -89,6 +90,12 @@ async function tzChaps(chapName, version){
                 'wordCnt' : value['count'],
             }
         })
+        if (Object.keys(matchChapJs).length == 0) {
+            matchChapJs["zeroMatch"] = {
+                'chapName' : "無比對結果",
+                'wordCnt' : 0,
+            }
+        }
         
         
         result['peopleList'].push(master)

@@ -10,6 +10,7 @@ export default async function allMatches(bn, targetID, version) {
     })
     
     var relationCol = version === 'all' ? 'all_relation' : 'cut_relation';
+    
     var result = {} 
     var tableName = bn == '通志' ? 'tongzhi' : 'official_history';
    

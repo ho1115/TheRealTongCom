@@ -1,6 +1,7 @@
 const ms = require('mysql2')
 import tzPL from "@/jsonBase/tzPeoList.json"
 import tzLL from "@/jsonBase/tzLenList.json"
+import tzIL from "@/jsonBase/tzIdList.json"
 
 
 export default async function hisStat(bn, cn, version) {
@@ -24,15 +25,14 @@ export default async function hisStat(bn, cn, version) {
         qRes = await conn.promise().query(sql, [bn])
     }
     else {
-        sql = `SELECT word_count, ${cnt}, ${rela} FROM official_history WHERE book_name = ? AND volumn = ?`;
+        sql = `SELECT word_count, ${cnt}, ${rela}, DBID FROM official_history WHERE book_name = ? AND volumn = ?`;
         qRes = await conn.promise().query(sql, [bn, cn])
     }
 
     for (let i = 0; i < qRes[0].length; i++) {
 
         var matchJs = JSON.parse(qRes[0][i][rela]);
-
-        Object.values(matchJs).forEach(info => {
+        Object.entries(matchJs).forEach(([pKey, info]) => {
             var tzChap; 
             var person;
             var spAr = info["name"].split(' ')
@@ -55,7 +55,9 @@ export default async function hisStat(bn, cn, version) {
             if (!result[tzChap]["pInfo"][person]) {
                 result[tzChap]["pInfo"][person] = {
                     "mCnt" : 0,
-                    "wCnt" : tLen
+                    "wCnt" : tLen,
+                    "peoID" : pKey,
+                    "hisID" : cn == 'allChaps' ? "plzSelect" : qRes[0][i]["DBID"]
                 };}
             result[tzChap]["pInfo"][person]["mCnt"] += mLen
         })
@@ -70,8 +72,13 @@ export default async function hisStat(bn, cn, version) {
                 result[key]['noMatch'].splice(ind, 1)
             }
         })
+        
+        for (let i = 0; i < result[key]['noMatch'].length; i++) {
+            result[key]['noMatch'][i] = result[key]['noMatch'][i] + "###" + tzIL[result[key]['noMatch'][i]]
+        }
 
     })
+
     conn.end();
     return result
 }

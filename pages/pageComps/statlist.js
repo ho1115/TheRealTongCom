@@ -3,6 +3,8 @@ import '@/app/globals.css'
 import entoch from "@/jsonBase/entoch.json"
 import chapStruct from "@/jsonBase/chapStruct.json"
 import tzByDyn from "@/jsonBase/tzByDyn.json"
+import tVol from "@/jsonBase/tzVol.json"
+import tDyn from "@/jsonBase/tzVolDyn.json"
 import Link from "next/link"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 
@@ -29,7 +31,7 @@ const Statlist = () => {
             ele.innerText = ele.innerText == String.fromCharCode(0x25B2) ? String.fromCharCode(0x25BC) : String.fromCharCode(0x25B2);
         }
     }
-    const collaConstruct = (chaps) => {
+    const collaConstruct = (chaps, tzBool) => {
         return (
             chapList[chaps].length > 1 ?
                 <Collapsible key = {`${chaps}00`}>
@@ -43,18 +45,18 @@ const Statlist = () => {
                     </div>
                     <CollapsibleContent key = {`${chaps}3`} className="overflow-auto border-2 rounded mt-2 border-minor bg-sec">
                         {Object.values(chapList[chaps]).map(subs =>(
-                        <Link key = {subs} className = "w-auto block py-1 pl-8 text-sm hover:bg-neutral-600 " 
+                        <Link key = {subs} className = "w-auto block py-1 pl-8 text-sm hover:bg-neutral-600 chLis" 
                             href = {{
                                 pathname : "./[chaps]",
                                 query :{ books: bookStat, chaps: subs },
-                            }}>{subs}
+                            }}>{tzBool ? `${subs} (第${tVol[subs]}卷, ${tDyn[tVol[subs]]})` : subs}
                         </Link>
                         ))}
                     </CollapsibleContent>
                     </div>
                 </Collapsible> :
                 <div key = {`${chaps}00`} className = "block w-full py-2 overflow-auto border-b-2 border-sec">
-                    <Link key = {chaps} className = "w-auto block py-1 pl-2 hover:bg-neutral-600 " 
+                    <Link key = {chaps} className = "w-auto block py-1 pl-2 hover:bg-neutral-600 chLis" 
                         href = {{
                             pathname : "./[chaps]",
                             query :{ books: bookStat, chaps: Object.values(chapList[chaps])[0] },
@@ -64,16 +66,17 @@ const Statlist = () => {
         )
     }
 
-    const renderTz = () => {
+    const renderTz = (path) => {
+        
         return (
-            <Tabs defaultValue = "juan">
+            <Tabs defaultValue = {path.includes("dyn") ? "dyn" : "juan"}>
                 <TabsList className = "bg-sec/80 w-full justify-around text-least">
                     <TabsTrigger value="juan" className = "bg-minor/20 w-full m-2 focus:bg-main">以卷分類</TabsTrigger>
                     <TabsTrigger value="dyn" className = "bg-minor/20 w-full m-2">以朝代分類</TabsTrigger>
                 </TabsList>
-                <TabsContent value="juan">{Object.keys(chapList).map(chaps => collaConstruct(chaps))}</TabsContent>
+                <TabsContent value="juan">{Object.keys(chapList).map(chaps => collaConstruct(chaps, true))}</TabsContent>
                 <TabsContent value="dyn">{Object.entries(tzByDyn).map(([key, value]) => (
-                    <Link key = "dyns" className = "w-auto block p-2 my-2 hover:bg-neutral-600 border-b-2 border-sec" 
+                    <Link key = {`${key}dyns`} className = "w-auto block p-2 my-2 hover:bg-neutral-600 border-b-2 border-sec" 
                           href = {{pathname : "./[chaps]", query :{ books: bookStat, chaps: `dyn-${key}` },}}>
                         {`${key} (共${value}位傳主)`}</Link>
                     ))}</TabsContent>                
@@ -90,15 +93,60 @@ const Statlist = () => {
             </Link>
             {!inList ?
                 chapList.map(chaps => ( 
-                    <Link key = {chaps} className = "w-auto block p-2 my-2 hover:bg-neutral-600 border-b-2 border-sec" 
+                    <Link key = {chaps} className = "w-auto block p-2 my-2 hover:bg-neutral-600 border-b-2 border-sec chLis" 
                         href = {{
                         pathname : "./[chaps]",
                         query :{ books: bookStat, chaps: chapList.indexOf(chaps) + 1 },
                         }}>{chaps}
                     </Link>
                     )
-                ) : Object.keys(chapList).map(chaps => collaConstruct(chaps))}
+                ) : Object.keys(chapList).map(chaps => collaConstruct(chaps, false))}
             </>
+        )
+    }
+
+    const preNextBTN = () => {
+        
+        const tarCh = router.query.chaps
+        const bk = router.query.books
+        var mergedArr = []
+        var thisIdx = -1
+        if (collaTarget.includes(bk)) {
+            let bkCh = entoch[bk]
+            Object.values(chapStruct[bkCh]).map((chaps) => (mergedArr = mergedArr.concat(chaps)));
+            thisIdx = mergedArr.indexOf(tarCh);
+        }
+        return (
+            !collaTarget.includes(bk) ?
+                <div className = "inline-flex justify-around w-full border-b-2 border-minor pb-2">
+                    <Link key = {tarCh} className = "w-auto block p-2 hover:bg-neutral-600 rounded" 
+                        href = {{
+                        pathname : "./[chaps]",
+                        query :{ books: bk, chaps: tarCh == 1 ? 1 : tarCh - 1},
+                        }}>＜- 前往上一卷
+                    </Link>
+                    <Link key = {tarCh} className = "w-auto block p-2 hover:bg-neutral-600 rounded" 
+                        href = {{
+                        pathname : "./[chaps]",
+                        query :{ books: bk, chaps: tarCh == chapList.length ? tarCh : parseInt(tarCh) + 1},
+                        }}>前往下一卷 -＞
+                    </Link>
+                </div>
+                 :
+                 <div className = "inline-flex justify-around w-full border-b-2 border-minor pb-2">
+                    <Link key = {tarCh} className = "w-auto block p-2 hover:bg-neutral-600 rounded" 
+                        href = {{
+                        pathname : "./[chaps]",
+                        query :{ books: bk, chaps: thisIdx == 0 ? mergedArr[thisIdx] :  mergedArr[thisIdx-1]},
+                        }}>＜- 前往上一卷
+                    </Link>
+                    <Link key = {tarCh} className = "w-auto block p-2 hover:bg-neutral-600 rounded" 
+                        href = {{
+                        pathname : "./[chaps]",
+                        query :{ books: bk, chaps: thisIdx == mergedArr.length-1 ?  mergedArr[thisIdx] :  mergedArr[thisIdx+1]},
+                        }}>前往下一卷 -＞
+                    </Link>
+             </div>
         )
     }
 
@@ -125,8 +173,9 @@ const Statlist = () => {
                 }
             </select>
         </div>
+        <div>{preNextBTN()}</div>
         <div className = "w-auto overflow-auto max-h-screen text-least pb-2 px-2 border-l-2 border-minor">
-            {bookStat == "tongchi" ? renderTz() : renderHis(collaTarget.includes(bookStat))} 
+            {bookStat == "tongchi" ? renderTz(router.query.chaps) : renderHis(collaTarget.includes(bookStat))} 
         </div>
     </div>
     );

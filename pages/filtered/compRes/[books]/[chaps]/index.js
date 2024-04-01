@@ -47,8 +47,11 @@ export default function Home({ posts }) {
       var pCnt = peopleJson['peopleList'].length
       return (
         <div className = "inline-flex mt-1 w-[81vw]">
-          <div className= "h-[89vh] w-[100vw] p-2 rounded">
-            <p className= "text-2xl p-2 w-auto">{posts['dynas'][0] == undefined ? '查無結果，請選擇其他章節。' : `${title} 傳主列表`}：</p>
+          <div className = "h-[89vh] w-[100vw] p-2 rounded">
+            <div className = "inline-flex justify-between w-full">
+              <p className = "text-2xl p-2 w-auto">{posts['dynas'][0] == undefined ? '查無結果，請選擇其他章節。' : `${title} 傳主列表`}：</p>
+              <p className = "text-sm text-red-400 self-end">(傳主比對字數不重複計算重疊的比對部分)</p>
+            </div>
             <div className = "overflow-auto mt-2 border-t-2 border-minor p-2 max-h-[82vh]">
               {Object.entries(peopleJson['people']).map(([key, value]) => (              
                 <Collapsible key = {`${key}0`}>
@@ -58,10 +61,10 @@ export default function Home({ posts }) {
                               onClick = {() => changeLBTN(`LBTN${key}`)} id = {`LBTN${key}`}>
                         <span key = {`${key}4`} className="inline-flex">
                           <p key = {`${key}5`} className="text-start self-center w-[10vw]">{`${key} (${value['dyna']})`}</p>       
-                          <p key = {`${key}6`} className="text-start self-center text-base">{`( ${value['matchCnt']}字已比對 / 共${value['totalCnt']}字 )`}</p> 
+                          <p key = {`${key}6`} className="text-start self-center text-base">{`( 比對到${value['matchCnt']}字 / 共${value['totalCnt']}字 )`}</p> 
                         </span>
                         <span key = {`${key}7`} className = "inline-flex">
-                          <p key = {`${key}8`} className = "text-start self-center text-base">{`${Object.keys(value['matchChaps']).length} 個比對結果`}</p>                                   
+                          <p key = {`${key}8`} className = "text-start self-center text-base">{`${value['matchCnt'] == 0 ? 0 : Object.keys(value['matchChaps']).length} 個比對結果`}</p>                                   
                           <p key = {`${key}9`} className = "text-start self-center text-lg ml-2 w-[1vw] text-minor">&#9660;</p>
                         </span>
                       </button>
@@ -74,7 +77,7 @@ export default function Home({ posts }) {
                           href = {{
                             pathname : "./[chaps]/[hisID]",
                             query :{ books: urlbn, chaps: urlcn, hisID: `${value['tongID']}##${subKey}`},
-                          }}>{`${value['matchChaps'][subKey]['chapName']} ( 比對${value['matchChaps'][subKey]['wordCnt']}字 )`}
+                          }} target="_blank">{`${value['matchChaps'][subKey]['chapName']} ( 比對${value['matchChaps'][subKey]['wordCnt']}字 )`}
                         </Link>
                         ))}
                     </CollapsibleContent>
@@ -99,7 +102,7 @@ export default function Home({ posts }) {
       return (
         <div className = "inline-flex mt-1 w-[81vw]">
           <div className= "h-[89vh] w-[100vw] p-2 rounded">
-            <p className= "text-2xl p-2 w-auto">{posts['dynas'][0] == undefined ? '查無結果，請選擇其他章節。' : `${title} 通志各卷列表`}：</p>
+            <p className= "text-2xl p-2 w-auto">{posts['dynas'][0] == undefined ? '查無結果，請選擇其他章節。' : `${title} 比對結果列表`}：</p>
             <div className = "overflow-auto mt-2 border-t-2 border-minor p-2 max-h-[82vh]">
               {Object.entries(peopleJson['subChaps']).map(([key, value]) => (              
                 <Collapsible key = {`${key}0`}>
@@ -122,7 +125,7 @@ export default function Home({ posts }) {
                           href = {{
                             pathname : "./[chaps]/[hisID]",
                             query :{ books: urlbn, chaps: urlcn, hisID: `${peopleJson['offID']}##${subKey}`},
-                          }}>{`${value[subKey]['chapName']} ( ${value[subKey]['wordCnt']}字已比對 / 共${value[subKey]['tWordCnt']}字 )`}
+                          }} target="_blank">{`${value[subKey]['chapName']} ( 比對到${value[subKey]['wordCnt']}字 / 共${value[subKey]['tWordCnt']}字 )`}
                         </Link>
                         ))}
                     </CollapsibleContent>

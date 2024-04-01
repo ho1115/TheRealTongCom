@@ -23,7 +23,7 @@ export default async function juanStat(chap, version) {
         "subInfo" : {},
     } 
     
-    var sql = `SELECT dynasty, name, word_count, ${cnt}, ${rela} FROM tongzhi WHERE chapter = ? and chapter_number = ?`;
+    var sql = `SELECT dynasty, name, word_count, ${cnt}, ${rela}, DBID FROM tongzhi WHERE chapter = ? and chapter_number = ?`;
     var qRes = await conn.promise().query(sql, [chSplit[0], chSplit[1]])
     result["peoCnt"] = qRes[0].length
     for (let i = 0; i < qRes[0].length; i++) {
@@ -32,6 +32,7 @@ export default async function juanStat(chap, version) {
         var tLen = qRes[0][i]['word_count'];
         var mLen = qRes[0][i][cnt];
         var matchJs = JSON.parse(qRes[0][i][rela]);
+        var did = qRes[0][i]['DBID'];
 
         result["mCnt"] += mLen
         result["wCnt"] += tLen
@@ -46,19 +47,19 @@ export default async function juanStat(chap, version) {
             };
         }
         if (mLen == 0) {
-            result["subInfo"][dyna]["noMatch"].push(person);
+            result["subInfo"][dyna]["noMatch"].push(`${person}###${did}`);
             continue;
         }
-        result["subInfo"][dyna]["matchPeo"][person] ={"mCnt" : mLen, "tCnt": tLen}
+        result["subInfo"][dyna]["matchPeo"][person] ={"mCnt" : mLen, "tCnt": tLen, "peoID" : did}
         result["subInfo"][dyna]["mCnt"] += mLen
         result["subInfo"][dyna]["tCnt"] += tLen
-        Object.values(matchJs).forEach(info => {
+        Object.entries(matchJs).forEach(([hKey, info]) => {
             if (!result["hisChapLen"][info["name"]]) {result["hisChapLen"][info["name"]] = hisChLen[info["name"].replace('-', '#')]}
             var hisName = info["name"].split('-')[0]
             var chapName = info["name"].split('-')[1]
             if (!result["subInfo"][dyna]["hisMatches"][hisName]) {result["subInfo"][dyna]["hisMatches"][hisName] = {"peoArr" : [], "mCnt" : 0, "chapInfo" : {}};}            
             if (!result["subInfo"][dyna]["hisMatches"][hisName]["chapInfo"][chapName]) {result["subInfo"][dyna]["hisMatches"][hisName]["chapInfo"][chapName] = {"mCnt" : 0, "peoInfo" : {}};}
-            result["subInfo"][dyna]["hisMatches"][hisName]["chapInfo"][chapName]["peoInfo"][person] = {"mCnt" : info["count"], "tCnt" : tLen}
+            result["subInfo"][dyna]["hisMatches"][hisName]["chapInfo"][chapName]["peoInfo"][person] = {"mCnt" : info["count"], "tCnt" : tLen, "peoID" : did, "hisID" : hKey}
             result["subInfo"][dyna]["hisMatches"][hisName]["chapInfo"][chapName]["mCnt"] += info["count"]
             result["subInfo"][dyna]["hisMatches"][hisName]["mCnt"] += info["count"]
             if (!result["subInfo"][dyna]["hisMatches"][hisName]["peoArr"].includes(person)) {result["subInfo"][dyna]["hisMatches"][hisName]["peoArr"].push(person)}
