@@ -1,7 +1,7 @@
 'use client';
 import React from "react";
-import Topnav from "@/pages/pageComps/topnav"
-import Footer from "@/pages/pageComps/footer"
+import Topnav from "@/pageComps/topnav"
+import Footer from "@/pageComps/footer"
 import textCompare from "./api/startCompare";
 import Head from "next/head";
 import { useState } from "react";
@@ -107,7 +107,7 @@ const alignBuilder = (matchJs, prefix, pos) => {
               <div className="bg-sec rounded ml-8 w-[35vw] h-[77vh]">
                 <div className="bg-minor/80 inline-flex justify-between w-full h-12 rounded text-xl px-4 pt-2">
                   <p>比對文字(一)</p>
-                  <p>{`共${LTlen}字(含標點)`}</p>
+                  <p>{`比對出${matchResult['totalMatchLen'] ? matchResult['totalMatchLen'] : 0}字(不含標點)，共${LTlen}字(含標點)`}</p>
                 </div>
                 { matchResult === "notYet" ?
                   <textarea className="p-2 overflow-auto max-h-[72vh] w-full h-full text-lg bg-main/0" value = {LText} id = "LBox" onChange = {setCompText}/>

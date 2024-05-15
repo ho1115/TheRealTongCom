@@ -1,5 +1,5 @@
-import Topnav from "@/pages/pageComps/topnav"
-import Footer from "@/pages/pageComps/footer"
+import Topnav from "@/pageComps/topnav"
+import Footer from "@/pageComps/footer"
 import searchEngine from "@/pages/api/searchEngine";
 import { useRouter } from "next/router";
 import {

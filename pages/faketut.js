@@ -1,7 +1,7 @@
 'use client';
 import React from "react";
-import Topnav from "@/pages/pageComps/topnav"
-import Footer from "@/pages/pageComps/footer"
+import Topnav from "@/pageComps/topnav"
+import Footer from "@/pageComps/footer"
 import Head from "next/head";
 import Image from "next/image";
 

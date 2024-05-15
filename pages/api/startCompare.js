@@ -293,6 +293,7 @@ export default function textCompare(tonchiContent, historyContent) {
     var cnt = 0
     var HLptr = 0
     var HRptr = 0
+    var matchLenTotal = 0
     
     
     result['tongTextN'] = {};
@@ -309,6 +310,7 @@ export default function textCompare(tonchiContent, historyContent) {
         TLptr = TRptr;
         TRptr += element['tonchi_length'];
         result['tongTextY'][cnt] = {'para' : tonchiContent.substring(TLptr, TRptr), 'spanID' : `${element['tonchi_index']}#${element['history_index']}`};
+        matchLenTotal += removeSymbol(tonchiContent.substring(TLptr, TRptr)).length;
         TLptr = TRptr;
         cnt += 1;
     });
@@ -331,6 +333,7 @@ export default function textCompare(tonchiContent, historyContent) {
 
     result['hisLen'] =  historyContent.length;
     result['hisName'] =  "比對文字(二)";
+    result['totalMatchLen'] = matchLenTotal;
 
     return result
 }

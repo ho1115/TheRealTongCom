@@ -8,8 +8,8 @@ import { useRouter} from "next/router";
 const Topnav = () => {
     const pathName = useRouter().pathname;
     
-    const usual = 'text-center text-least hover:text-zinc-400';
-    const current = 'text-center text-minor hover:text-zinc-400';
+    const usual = 'text-center text-least hover:text-zinc-400 p-2';
+    const current = 'text-center text-minor hover:text-zinc-400 p-2';
     const version = pathName.startsWith('/not-filtered') ? '過濾版本' : '未過濾版本';
     const reVersion = pathName.startsWith('/not-filtered') ? '未過濾版本' : '過濾版本';
     const pathPre = pathName.startsWith('/not-filtered') ? '/not-filtered' : '/filtered';
@@ -22,12 +22,12 @@ const Topnav = () => {
             <Image
               className = "rounded pr-4"
               src = "/logo.png"
-              width = {100}
-              height = {100}
+              width = {60}
+              height = {60}
               alt = "jcnBCL.jpg"
-            /><p className="self-center">通志史料比對系統</p>
+            /><p className="self-center text-[2vw]">通志史料比對系統</p>
           </Link>
-          <p className = "text-base text-least self-end truncate ml-4">{pathName.startsWith('/us') || pathName.startsWith('/tut')  || pathName.startsWith('/af') ? '' : `目前檢視版本 : ${reVersion}`}</p>
+          <p className = "text-base text-least self-center truncate ml-4">{pathName.startsWith('/us') || pathName.startsWith('/tut')  || pathName.startsWith('/af') ? '' : `目前檢視版本 : ${reVersion}`}</p>
         </div>
         <div className = "inline-flex">   
           <div>

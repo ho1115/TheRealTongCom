@@ -1,7 +1,7 @@
 'use client';
 import React from "react";
-import Topnav from "@/pages/pageComps/topnav"
-import Footer from "@/pages/pageComps/footer"
+import Topnav from "@/pageComps/topnav"
+import Footer from "@/pageComps/footer"
 import Head from "next/head";
 import Image from "next/image";
 import Link from "next/link";
@@ -46,15 +46,15 @@ export default  function Home() {
                 </p>
                 <p className = "my-4 text-xl">Levenshtein distance：</p>
                 <p className = "text-start w-full bg-sec/80 rounded p-2 text-lg">
-                   此為後續比對時會使用到的重要概念，可理解為"文字編輯距離"，計算的是將一段文字改為另一段文字需要做多少次的編輯。<br />
+                   此為後續比對時會使用到的重要概念，可理解為&quot;文字編輯距離&quot;，計算的是將一段文字改為另一段文字需要做多少次的編輯。<br />
                    可接受的編輯方式有 1. 新增一個字 、 2. 刪除一個字 、 3. 替換一個字。<br />
-                   每次的動作皆會被計算為 "1編輯距離"，兩段文字的編輯距離越長則代表相異的程度越高。
+                   每次的動作皆會被計算為 &quot;1編輯距離&quot;，兩段文字的編輯距離越長則代表相異的程度越高。
                 </p>
                 <p className = "my-4 text-xl">比對說明：</p>
                 <p className = "text-start w-full bg-sec/80 rounded p-2 text-lg">
-                   1. 萃取出A、B兩段比對文字的所有 "4-gram" 起點 ("4-gram" 即4字詞，如 "示範文字一" 有 "示範文字" 、 "範文字一" 兩個 "4-gram")<br />
-                   2. 以A文本的所有 "4-gram" 為主，至B文本中的 "所有相同的4-gram起點" 開始進行第3至第4步的比對，直到A文本中的所有 "4-gram" 都已被比對過<br />
-                   3-1. 比對前，會先檢查目前的"4-gram"在兩段文字中是否有被涵蓋在先前的比對結果內，若有則跳過不比，以避免重疊現象。<br />
+                   1. 萃取出A、B兩段比對文字的所有 &quot;4-gram&quot; 起點 (&quot;4-gram&quot; 即4字詞，如 &quot;示範文字一&quot; 有 &quot;示範文字&quot; 、 &quot;範文字一&quot; 兩個 &quot;4-gram&quot;)<br />
+                   2. 以A文本的所有 &quot;4-gram&quot; 為主，至B文本中的 &quot;所有相同的4-gram起點&quot; 開始進行第3至第4步的比對，直到A文本中的所有 &quot;4-gram&quot; 都已被比對過<br />
+                   3-1. 比對前，會先檢查目前的&quot;4-gram&quot;在兩段文字中是否有被涵蓋在先前的比對結果內，若有則跳過不比，以避免重疊現象。<br />
                    3-2. 進入比對時，會從相同的四個字開始，每次皆在兩邊的比對文字多新增一個字計算相似度，相似度的計算方式為 1 - (Levenshtein distance / 目前長度)<br />
                    3-3. 當相似度連續下降6次、連續3次不達70%時，則捨去後段的6字或3字並中斷第3步的比對。 A、B文本已被比對到結尾時則直接中斷。<br />
                    3-4. 若本次比對結果不達10字則直接捨棄比對結果，略過第4步。<br />
@@ -91,10 +91,10 @@ export default  function Home() {
                     alt = "jcnBCL.jpg"/>
                 <div className = "pl-2 text-lg bg-sec/60 rounded p-2 mt-2 ml-2 mr-16">
                   <p className = "text-center mb-4 text-base">上圖為比對結果的史料及傳主選擇頁面。</p>
-                  <p className = "mb-4 pl-2 border-l-2 border-red-500">左側紅框的A區域可讓使用者選擇欲檢視的史料及章節。<br />選擇的史料為通志時將看到 "通志比對其他所有史料的結果"；
-                    選擇的史料為其他史料時將看到 "該史料比對通志的結果"</p>
+                  <p className = "mb-4 pl-2 border-l-2 border-red-500">左側紅框的A區域可讓使用者選擇欲檢視的史料及章節。<br />選擇的史料為通志時將看到 &quot;通志比對其他所有史料的結果&quot;；
+                    選擇的史料為其他史料時將看到 &quot;該史料比對通志的結果&quot;</p>
                   <p className = "mb-4 pl-2 border-l-2 border-green-500">中間綠框的B區域可讓使用者選擇傳主，點選底下的任一結果即可前往查看比對內容。<br />
-                    本區除了提供該傳主的 "總比對字數/原文全部字數" 外，也提供各個比對結果的比對字數。<br />傳主的總比對字數不會重複統計重疊到的比對部分。</p>
+                    本區除了提供該傳主的 &quot;總比對字數/原文全部字數&quot; 外，也提供各個比對結果的比對字數。<br />傳主的總比對字數不會重複統計重疊到的比對部分。</p>
                   <p className = "mb-4 pl-2 border-l-2 border-yellow-400">右側黃框的C區域提供本章節涵蓋的朝代、所有傳主的數量及名稱。</p>
                 </div>
                 <p className = "border-l-2 border-minor pl-2 text-xl my-4" id = "文比2">比對結果頁面-文字比對結果頁面</p>
@@ -135,7 +135,7 @@ export default  function Home() {
                 <div className = "pl-2 text-lg bg-sec/60 rounded p-2 mt-2 ml-2 mr-16">
                   <p className = "text-center mb-4 text-base">上圖為數據分布的其他史料頁面。</p>
                   <p className = "mb-4 pl-2 border-l-2 border-red-500">左側紅框的A區域選擇的是非通志的其他史料時，則呈現內容會有些許不同。</p>
-                  <p className = "mb-4 pl-2 border-l-2 border-green-500">中間綠框的B區域可檢視選擇的史料的"全書比對到的通志傳主概況"，比對結果的分布則可檢視所選章節的"通志比對詳細狀況"。
+                  <p className = "mb-4 pl-2 border-l-2 border-green-500">中間綠框的B區域可檢視選擇的史料的&quot;全書比對到的通志傳主概況&quot;，比對結果的分布則可檢視所選章節的&quot;通志比對詳細狀況&quot;。
                   </p>
                 </div>
               </div>
@@ -151,10 +151,10 @@ export default  function Home() {
                     alt = "jcnBCL.jpg"/>
                 <div className = "pl-2 text-lg bg-sec/60 rounded p-2 mt-2 ml-2 mr-16">
                   <p className = "text-center mb-4 text-base">在頁面最上方的紅框處會顯示使用者目前檢視的過濾版本，右側的綠框處則可做版本的切換。</p>
-                  <p className = "mb-4 pl-2">由於本系統史料間比對時，最低比對字數為10字，因此會出現許多兩個史料間僅有10字左右的少字數比對結果 (如 : "段落一" 在 "段落二" 中 全部只比對到15字。)。<br />
+                  <p className = "mb-4 pl-2">由於本系統史料間比對時，最低比對字數為10字，因此會出現許多兩個史料間僅有10字左右的少字數比對結果 (如 : &quot;段落一&quot; 在 &quot;段落二&quot; 中 全部只比對到15字。)。<br />
                     因為本系統的比對方式主要是進行大段落的相似比對，在設計上有容忍段落間一定比例的不同處。<br />
                     但上述的少字數比對將因此多為不準確的比對結果 (如比對到10字，但實際上只有零散的7字相似。)。<br />
-                    因應此現象，本系統預設呈現給使用者的是過濾後的版本。過濾條件為 "字數為15字以下(含) 且 比對字數比例低於該通志段落的總字數50%" 的比對結果將被屏除。
+                    因應此現象，本系統預設呈現給使用者的是過濾後的版本。過濾條件為 &quot;字數為15字以下(含) 且 比對字數比例低於該通志段落的總字數50%&quot; 的比對結果將被屏除。
                     <br /> 使用者依然可依自身需求切換至未過濾的版本進行使用。
                   </p>
                 </div>

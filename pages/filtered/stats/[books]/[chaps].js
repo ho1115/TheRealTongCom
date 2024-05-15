@@ -1,13 +1,13 @@
 'use client';
 
-import Topnav from "@/pages/pageComps/topnav"
-import Footer from "@/pages/pageComps/footer"
-import Statlist from "@/pages/pageComps/statlist"
+import Topnav from "@/pageComps/topnav"
+import Footer from "@/pageComps/footer"
+import Statlist from "@/pageComps/statlist"
 import hisStat from "@/pages/api/hisStat"
 import tzDynStat from "@/pages/api/tzDynStat"
 import tzJuanStat from "@/pages/api/tzJuanStat"
-import Statgeneral from "@/pages/pageComps/statgene";
-import Statdetail from "@/pages/pageComps/statdetail";
+import Statgeneral from "@/pageComps/statgene";
+import Statdetail from "@/pageComps/statdetail";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import { useState } from "react";
@@ -129,7 +129,7 @@ export default function Home({ posts }) {
               </div>
           }
           
-          <Tabs defaultValue = "juan" className = "w-full block">
+          <Tabs defaultValue = "juan" className = "w-full block pb-[4.5vh]">
               <TabsList className = "bg-sec/0 w-[75vw] mt-2 inline-flex justify-between text-least">
                   <div>
                     <TabsTrigger value="juan" className = "bg-minor/20 m-1">{isTz ? "傳主分布" : "全書比對概況"}</TabsTrigger>

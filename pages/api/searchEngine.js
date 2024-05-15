@@ -22,11 +22,11 @@ export default async function searchPeo(target, version) {
         'matches' : [],
     } 
    
-    var sql = `SELECT chapter, chapter_number, volume, dynasty, word_count, ${mCnt}, ${relationCol}, DBID FROM tongzhi WHERE name = ?`;
-    var qRes = await conn.promise().query(sql, [target]);
+    var sql = `SELECT chapter, chapter_number, volume, dynasty, word_count, ${mCnt}, ${relationCol}, name, DBID FROM tongzhi WHERE name LIKE ?`;
+    var qRes = await conn.promise().query(sql, [`%${target}%`]);
     if (qRes.length == 0) {return "noMatch";}
     Object.values(qRes[0]).forEach(ele => {
-        result['peos'].push(target)
+        result['peos'].push(ele['name'])
         result['chap'].push(`${ele['chapter']} ${ele['chapter_number']} (第${ele['volume']}卷)`)
         result['dyn'].push(ele['dynasty'])
         result['wCnt'].push(ele['word_count'])

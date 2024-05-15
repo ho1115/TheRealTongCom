@@ -79,6 +79,15 @@ html {
   }
 }
 
+.readSn{
+  white-space: pre-line;
+}
+
+.ft {
+  position: fixed;
+  bottom: 0;
+}
+
 ::-webkit-scrollbar {
   width: 10px;
 }

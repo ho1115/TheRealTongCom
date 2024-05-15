@@ -1,8 +1,8 @@
 'use client';
 
 import * as React from "react"
-import Topnav from "@/pages/pageComps/topnav"
-import Footer from "@/pages/pageComps/footer"
+import Topnav from "@/pageComps/topnav"
+import Footer from "@/pageComps/footer"
 import allMatches from "@/pages/api/compMatches"
 import contentMatches from "@/pages/api/contentDetail"
 import emptyMatches from "@/pages/api/emptyMatch";
@@ -136,25 +136,25 @@ export default function Home({ posts, conts }) {
                     query :{ books: subjectBook, chaps: subjectChap, hisID: `${bothID[1]}##${bothID[0]}`},
                   }}>{`更換為 ${subjectTar} 之比對結果`}
             </Link>}
-            <div className="inline-flex justify-between w-full max-h-[80vh]">
-              <div className="bg-sec rounded ml-8 w-[35vw] max-h-[75vh]">
-                <div className="bg-minor/80 inline-flex justify-between w-full h-12 rounded text-xl px-4 pt-2">
+            <div className="inline-flex justify-between w-full max-h-[80vh] pb-[5vh]">
+              <div className="bg-sec rounded ml-8 w-[35vw] max-h-[72vh]">
+                <div className="bg-minor/80 inline-flex justify-between w-full h-12 rounded text-[1.1vw] px-4 pt-2">
                   <p>{tzOnLeft ? `${conts['tongName']} `: `${conts['hisName']}`}</p>
                   <p>{tzOnLeft ? `總比對字數 : ${conts['tmLen']}字 / 總字數 : ${conts['tongLen']}字`: `總比對字數 : ${conts['hmLen']}字 / 總字數 : ${conts['hisLen']}字`}</p>
                 </div>
-                <div className="p-2 overflow-auto max-h-[66vh] text-lg" id = "LBox">
+                <div className="p-2 overflow-auto max-h-[66vh] text-[1.1vw] readSn" id = "LBox">
                   {
                     tzOnLeft ? alignBuilder(conts, 'tong', 'L'): alignBuilder(conts, 'his', 'L')
                   }                  
                 </div >
               </div>
-              <div className="bg-sec rounded mr-32 w-[35vw] max-h-[75vh]">
-                <div className="bg-minor/80 inline-flex justify-between w-full h-12 rounded text-xl px-4 pt-2">
+              <div className="bg-sec rounded mr-32 w-[35vw] max-h-[72vh]">
+                <div className="bg-minor/80 inline-flex justify-between w-full h-12 rounded text-[1.1vw] px-4 pt-2">
                   <p>{!tzOnLeft ? `${conts['tongName']} `: `${conts['hisName']}`}</p>
                   <p>{!tzOnLeft ? `比對${lenBool ? 0 : posts[router.query.hisID.split('##')[1]]['mLen']}字 / 共${conts['tongLen']}字`: 
                                   `比對${lenBool ? 0 : posts[router.query.hisID.split('##')[1]]['mLen']}字 / 共${conts['hisLen']}字`}</p>
                 </div>
-                <div className="p-2 overflow-auto max-h-[66vh] text-lg" id = "RBox">
+                <div className="p-2 overflow-auto max-h-[66vh] text-[1.1vw] readSn" id = "RBox">
                   
                   {!tzOnLeft ? alignBuilder(conts, 'tong', 'R'): alignBuilder(conts, 'his', 'R')}
                 </div>

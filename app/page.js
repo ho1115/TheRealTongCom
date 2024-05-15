@@ -1,6 +1,6 @@
 import Link from 'next/link'
 import Image from 'next/image'
-import Footer from '@/pages/pageComps/footer'
+import Footer from '@/pageComps/footer'
 // logo from https://wepik.com/ , https://onlinejpgtools.com/make-jpg-transparent
 export default function Home() {
   return  (
@@ -22,7 +22,7 @@ export default function Home() {
               height = {120}
               alt = "jcnBCL.jpg"
             />
-            <p className = 'w-full text-[3rem] text-center pt-2 mt-2 inline-flex truncate'>通志史料比對系統</p>
+            <p className = 'w-full text-[2.2vw] text-center self-center pt-2 mt-2 inline-flex truncate'>通志史料比對系統</p>
           </div>
         </div>
         <div className = 'h-[70vh] inline-flex flex-col justify-around ml-4'>

@@ -1,6 +1,6 @@
-import Topnav from "@/pages/pageComps/topnav"
-import Hislist from "@/pages/pageComps/hislist"
-import Footer from "@/pages/pageComps/footer"
+import Topnav from "@/pageComps/topnav"
+import Hislist from "@/pageComps/hislist"
+import Footer from "@/pageComps/footer"
 import subChapRoute from "@/pages/api/subChaps"
 import { useRouter } from "next/router";
 import {

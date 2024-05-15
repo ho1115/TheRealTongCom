@@ -1,7 +1,7 @@
 import * as React from "react"
 import { useEffect } from 'react'
 import { useRouter } from 'next/router'
-import Custskel from "./pageComps/customskeleton";
+import Custskel from "@/pageComps/customskeleton";
  
 export default function MyApp({ Component, pageProps }) {
     const router = useRouter();

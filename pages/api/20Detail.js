@@ -1,6 +1,6 @@
 const ms = require('mysql2') 
 
-export default async function contentMatches(TID, HID, version) {
+export default async function contentMatches(TID, HID) {
     const conn = ms.createConnection({
         host: process.env.HOST,
         database: process.env.DATABASE,
@@ -9,15 +9,15 @@ export default async function contentMatches(TID, HID, version) {
         port: process.env.SQLPORT
     })
     
-    var relationTable = version === 'all' ? 'old_relations' : 'tongzhi_official_history_relations';
+    var relationTable ='20rela';
     var result = {} 
-    var mCnt = version === 'all' ? 'all_lap_length' : 'cut_lap_length';
+    var mCnt ='all_lap_length';
     var sql = `SELECT match_info FROM ${relationTable} WHERE tongzhi_ID = ? and official_history_ID = ?`;
     var qRes = await conn.promise().query(sql, [TID, HID])
     
     result['matchArrs'] =  JSON.parse(qRes[0][0]['match_info']);
 
-    sql = `SELECT content, word_count, name, chapter, chapter_number, ${mCnt} FROM tongzhi WHERE DBID = ?`;
+    sql = `SELECT content, word_count, name, chapter, ${mCnt} FROM 20tong WHERE DBID = ?`;
     
     qRes = await conn.promise().query(sql, [TID]);
     result['tmLen'] = qRes[0][0][mCnt]
@@ -31,13 +31,12 @@ export default async function contentMatches(TID, HID, version) {
     result['tongTextN'] = {};
     result['tongTextY'] = {};
     result['tongLen'] =  qRes[0][0]['word_count'];
-    result['tongName'] =  `通志 / ${qRes[0][0]['chapter']} ${qRes[0][0]['chapter_number']} - ${qRes[0][0]['name']}`;
+    result['tongName'] =  `${qRes[0][0]['chapter']} - ${qRes[0][0]['name']}`;
 
-    sql = `SELECT content, word_count, book_name, volumn, book_name, ${mCnt} FROM official_history WHERE DBID = ?`;
+    sql = `SELECT content, word_count, book_name, volumn, book_name FROM 20his WHERE DBID = ?`;
     qRes = await conn.promise().query(sql, [HID]);
     var Htext = qRes[0][0]['content']
     var trueHtext = [...Htext]
-    result['hmLen'] = qRes[0][0][mCnt]
     result['hisTextN'] = {};
     result['hisTextY'] = {};
     result['hisBook'] = qRes[0][0]['book_name'];

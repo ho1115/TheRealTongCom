@@ -1,5 +1,5 @@
 import Link from "next/link";
-import Footer from "@/pages/pageComps/footer";
+import Footer from "@/pageComps/footer";
 export default function notFound() {
   return  (
  
